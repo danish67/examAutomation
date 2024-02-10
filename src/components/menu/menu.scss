@@ -1,0 +1,89 @@
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
+
+.menu {
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .title {
+      font-size: 12px;
+      font-weight: 500;
+      color: $soft-color;
+      text-transform: uppercase;
+
+      @include lg{
+        display: none;
+      }
+    }
+
+    .listItem {
+      display: flex;
+      font-weight: 500;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 5px;
+
+      &:hover {
+        background-color: $soft-color;
+      }
+
+      .listItemTitle{
+        @include lg{
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+
+// .menu {
+//   .item {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 10px;
+//     margin-bottom: 20px;
+
+//     .title {
+//       font-size: 20px;
+//       font-weight: 500;
+//       color: $soft-color;
+//       text-transform: uppercase;
+//       cursor: pointer;
+
+//       @include lg {
+//         display: none;
+//       }
+//       &.expanded {
+//         font-size: 10px; /* Change to 10px when expanded */
+//       }
+//     }
+
+//     .listItem {
+//       display: none; /* Hide list items by default */
+//       font-weight: 500;
+//       align-items: center;
+//       gap: 10px;
+//       padding: 10px;
+//       border-radius: 5px;
+
+//       &:hover {
+//         background-color: $soft-color;
+//       }
+
+//       .listItemTitle {
+//         @include lg {
+//           display: none;
+//         }
+//       }
+//     }
+
+//     &.expanded .listItem {
+//       display: flex; /* Show list items when .expanded class is present */
+//     }
+//   }
+// }
