@@ -1,7 +1,7 @@
 import "./home.scss";
-const Home = () => {
+const AddExam = () => {
     return (<div className="home">
-      <h1>Hello</h1>
+      <h1>AddExam</h1>
     </div>);
 };
-export default Home;
+export default AddExam;
