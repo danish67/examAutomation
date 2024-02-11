@@ -6,7 +6,6 @@
 // import Footer from "./components/footer/Footer";
 // import Menu from "./components/menu/Menu";
 // import Login from "./pages/login/Login";
-// import "./styles/global.scss";
 // import User from "./pages/user/User";
 // import Product from "./pages/product/Product";
 // import { QueryClient, QueryClientProvider, } from "react-query";
@@ -64,8 +63,15 @@
 // }
 // export default App;
 
+import "./styles/global.scss";
+import "./index.css";
 import Home from "./pages/home/Home";
-import { createBrowserRouter, RouterProvider, Outlet, useNavigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  useNavigate,
+} from "react-router-dom";
 // import Users from "./pages/users/Users";
 // import Products from "./pages/products/Products";
 import Navbar from "./components/navbar/Navbar";
@@ -75,64 +81,64 @@ import Login from "./pages/login/Login";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useState } from "react";
 
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    const Layout = () => {
-        const navigate = useNavigate(); // move inside Layout component
-        return (
-            <div className="main">
-                <Navbar />
-                <div className="container">
-                    <div className="menuContainer">
-                        <Menu />
-                    </div>
-                    <div className="contentContainer">
-                        <QueryClientProvider client={queryClient}>
-                            <Outlet />
-                        </QueryClientProvider>
-                    </div>
-                </div>
-                <Footer />
-            </div>
-        );
-    };
-
-    const router = createBrowserRouter([
-        {
-            path: "/",
-            element: isLoggedIn ? <Layout />:  <Login />,
-            children: [
-                {
-                    path: "/",
-                    element: <Home />,
-                },
-                {
-                    path: "/users",
-                    element: <Home/>,
-                },
-                {
-                    path: "/products",
-                    element: <Home />,
-                },
-            ],
-        },
-    ]);
-
-    const handleLogin = () => {
-        // Perform login logic, set isLoggedIn to true if login is successful
-        setIsLoggedIn(true);
-        navigate("/");
-    };
-
+  const Layout = () => {
+    const navigate = useNavigate();
     return (
-        <RouterProvider router={router}>
-            {!isLoggedIn && <Login onLogin={handleLogin} />}
-        </RouterProvider>
+      <div className="main">
+        <Navbar />
+        <div className="container">
+          <div className="menuContainer">
+            <Menu />
+          </div>
+          <div className="contentContainer">
+            <Outlet />
+          </div>
+        </div>
+        <Footer />
+      </div>
     );
+  };
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: isLoggedIn ? <Layout /> : <Login />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/users",
+          element: <Layout />,
+        },
+        {
+          path: "/products",
+          element: <Home />,
+        },
+      ],
+    },
+    // {
+    //   path: "/login",
+    //   element: <Login />,
+    // },
+  ]);
+  const handleLogin = () => {
+    // Perform login logic, set isLoggedIn to true if login is successful
+    setIsLoggedIn(true);
+    navigate("/")
+};
+
+
+return (
+    <RouterProvider router={router}>
+        {!isLoggedIn && <Login onLogin={handleLogin} />}
+    </RouterProvider>
+);
 }
 
 export default App;
-
