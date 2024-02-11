@@ -90,7 +90,7 @@ export const menu = [
             {
                 id: 1,
                 title: "Add Exam",
-                url: "/",
+                url: "/addExam",
                 icon: "chart.svg",
             },
             {
