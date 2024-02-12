@@ -1,7 +1,7 @@
 import { useState } from "react";
 // import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
-function AddExam() {
+function AddSubject() {
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [scheme, setScheme] = useState("");
@@ -18,13 +18,90 @@ function AddExam() {
         {/* Existing form content */}
         {/* You can integrate the new fields here */}
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Exam Information</h2>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">
+            Subject Information
+          </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            
-          <div className="sm:col-span-3">
-              <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
-                Batch
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="scheme"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Subject Name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  id="scheme"
+                  name="scheme"
+                  value={scheme}
+                  onChange={(e) => setScheme(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="scheme"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Subject Code
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  id="scheme"
+                  name="scheme"
+                  value={scheme}
+                  onChange={(e) => setScheme(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="scheme"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Scheme
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  id="scheme"
+                  name="scheme"
+                  value={scheme}
+                  onChange={(e) => setScheme(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="start-year"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Semester
+              </label>
+              <div className="mt-2">
+                <input
+                  type="number"
+                  id="start-year"
+                  name="start-year"
+                  value={startYear}
+                  onChange={(e) => setStartYear(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="department"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Department
               </label>
               <div className="mt-2">
                 <select
@@ -40,78 +117,14 @@ function AddExam() {
                 </select>
               </div>
             </div>
-            
-            <div className="sm:col-span-3">
-              <label htmlFor="scheme" className="block text-sm font-medium leading-6 text-gray-900">
-                Month
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  id="scheme"
-                  name="scheme"
-                  value={scheme}
-                  onChange={(e) => setScheme(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <label htmlFor="start-year" className="block text-sm font-medium leading-6 text-gray-900">
-                Year
-              </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  id="start-year"
-                  name="start-year"
-                  value={startYear}
-                  onChange={(e) => setStartYear(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <label htmlFor="scheme" className="block text-sm font-medium leading-6 text-gray-900">
-                Type of Exam
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  id="scheme"
-                  name="scheme"
-                  value={scheme}
-                  onChange={(e) => setScheme(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <label htmlFor="start-year" className="block text-sm font-medium leading-6 text-gray-900">
-                Semester
-              </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  id="start-year"
-                  name="start-year"
-                  value={startYear}
-                  onChange={(e) => setStartYear(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-
-            
           </div>
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+          <button
+            type="button"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Cancel
           </button>
           <button
@@ -124,6 +137,6 @@ function AddExam() {
       </div>
     </form>
   );
-};
+}
 
-export default AddExam;
+export default AddSubject;
