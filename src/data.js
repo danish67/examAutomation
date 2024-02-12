@@ -6,7 +6,7 @@ export const menu = [
             {
                 id: 1,
                 title: "Main",
-                url: "/",
+                url: "/home",
                 icon: "home.svg",
             },
         ],
@@ -18,7 +18,7 @@ export const menu = [
             {
                 id: 1,
                 title: "Add Student",
-                url: "/",
+                url: "/addStudent",
                 icon: "home.svg",
             },
             {
@@ -36,7 +36,7 @@ export const menu = [
             {
                 id: 1,
                 title: "Add Section",
-                url: "/",
+                url: "/addSection",
                 icon: "setting.svg",
             },
             {
@@ -54,7 +54,7 @@ export const menu = [
             {
                 id: 1,
                 title: "Add Batch",
-                url: "/",
+                url: "/addBatch",
                 icon: "element.svg",
             },
             {
@@ -72,7 +72,7 @@ export const menu = [
             {
                 id: 1,
                 title: "Add Department",
-                url: "/users",
+                url: "/addDepartment",
                 icon: "user.svg",
             },
             {

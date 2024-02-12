@@ -63,8 +63,6 @@
 // }
 // export default App;
 
-import "./styles/global.scss";
-import "./index.css";
 // import Home from "./pages/home/Home";
 // import {
 //   createBrowserRouter,
@@ -217,6 +215,8 @@ import "./index.css";
 // }
 
 // export default App;
+import "./styles/global.scss";
+import "./index.css";
 import React, { useState, useEffect } from "react";
 import {
   createBrowserRouter,
@@ -237,6 +237,12 @@ import AddExam from "./pages/Exam/addExam/addExam";
 import Home from "./pages/home/Home";
 import { QueryClient, QueryClientProvider } from "react-query";
 import AuthRequired from "./AuthRequired";
+import AddStudent from "./pages/Student/addStudent/addStudent";
+import AddBatchForm from "./pages/Batch/addBatch/addBatchForm";
+import AddDepartmentForm from "./pages/Department/addDepartment/addDeptForm";
+import AddSectionForm from "./pages/Section/addSection/addSection";
+import AddManually from "./components/Student/addStudent/addManually";
+import AddExcel from "./components/Student/addStudent/addExcel";
 const queryClient = new QueryClient();
 
 function App() {
@@ -275,6 +281,13 @@ function App() {
         <Route element={<AuthRequired />}>
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Home />} />
+            <Route path="/addStudent" element={<AddStudent />}>
+              <Route path="/addStudent/addManually" element={<AddManually />} />
+              <Route path="/addStudent/addExcel" element={<AddExcel />} />
+            </Route>
+            <Route path="/addBatch" element={<AddBatchForm />} />
+            <Route path="/addDepartment" element={<AddDepartmentForm />} />
+            <Route path="/addSection" element={<AddSectionForm />} />
           </Route>
         </Route>
       </Routes>
