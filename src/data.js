@@ -24,7 +24,7 @@ export const menu = [
             {
                 id: 2,
                 title: "Student Details",
-                url: "/users/1",
+                url: "/studentDeatils",
                 icon: "user.svg",
             },
         ],
@@ -96,7 +96,7 @@ export const menu = [
             {
                 id: 3,
                 title: "Assign Exam",
-                url: "/",
+                url: "/assignExam",
                 icon: "log.svg",
             },
             {
@@ -114,7 +114,7 @@ export const menu = [
             {
                 id: 1,
                 title: "Add Subject",
-                url: "/",
+                url: "/addSubject",
                 icon: "chart.svg",
             },
             {
