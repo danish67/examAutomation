@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useContext } from "react";
 // import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
-import AuthContext from "C:/Work/examautomation/src/store/auth-context";
+import AuthContext from "../../store/auth-context";
 // import { useHistory } from 'react-router-dom';
 const LoginFormSection = ({ onToggleForm }) => {
   const AuthCtx = useContext(AuthContext);
