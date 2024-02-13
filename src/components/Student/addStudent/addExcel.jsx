@@ -56,6 +56,7 @@ function AddExcel() {
     const updatedWorkbook = XLSX.utils.book_new();
     const updatedSheetObject = XLSX.utils.json_to_sheet(updatedSheet);
     XLSX.utils.book_append_sheet(updatedWorkbook, updatedSheetObject, 'Sheet1');
+    XLSX.saveChanges 
     XLSX.writeFile(updatedWorkbook, filename);
     setChangesSaved(true); 
     console.log(filename)
