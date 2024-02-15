@@ -6,3 +6,5 @@ const AuthRequired = () => {
     return isLoggedIn ? <Outlet/> : <Navigate to = "/login"/>
 }
  export default AuthRequired
+
+

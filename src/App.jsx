@@ -1,4 +1,3 @@
-
 import "./styles/global.scss";
 import "./index.css";
 import React, { useState, useEffect } from "react";
@@ -12,6 +11,7 @@ import {
   RouterProvider,
   Outlet,
   Router,
+  Navigate,
 } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
@@ -30,6 +30,9 @@ import AddExcel from "./components/Student/addStudent/addExcel";
 import AddSubject from "./pages/Subject/addSubject/addSubject";
 import AssignExam from "./pages/Exam/assignExam/assignExam";
 import StudentDetails from "./pages/Student/studentDetails/studentDetails";
+import PageNotFound from "./pages/Erropages/pageNotFound";
+import SectionDetails from "./pages/Section/sectionDetails/sectionDetails";
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -51,6 +54,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+
         <Route element={<AuthRequired />}>
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Home />} />
@@ -58,18 +62,22 @@ function App() {
               <Route path="/addStudent/addManually" element={<AddManually />} />
               <Route path="/addStudent/addExcel" element={<AddExcel />} />
             </Route>
-            <Route path="/studentDeatils" element ={<StudentDetails/>}/>
+            <Route path="/studentDeatils" element={<StudentDetails />} />
             <Route path="/addBatch" element={<AddBatchForm />} />
             <Route path="/addDepartment" element={<AddDepartmentForm />} />
             <Route path="/addSection" element={<AddSectionForm />} />
-            <Route path ="/addExam" element={<AddExam/>}/>
-            <Route path="/addSubject" element={<AddSubject/>}/>
-            <Route path="/assignExam" element={<AssignExam/>}/>
+            <Route path="/addExam" element={<AddExam />} />
+            <Route path="/addSubject" element={<AddSubject />} />
+            <Route path="/assignExam" element={<AssignExam />} />
+            <Route path="/sectionDetails" element={<SectionDetails />} />
           </Route>
+
         </Route>
+        <Route path="/*" element={<Navigate to="/404" />} />
+        <Route path="/404" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
-  );
+  );  
 }
 
 export default App;
