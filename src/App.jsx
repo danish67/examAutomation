@@ -31,6 +31,7 @@ import AddSubject from "./pages/Subject/addSubject/addSubject";
 import AssignExam from "./pages/Exam/assignExam/assignExam";
 import StudentDetails from "./pages/Student/studentDetails/studentDetails";
 import PageNotFound from "./pages/Erropages/pageNotFound";
+import SectionDetails from "./pages/Section/sectionDetails/sectionDetails";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ function App() {
             <Route path="/addExam" element={<AddExam />} />
             <Route path="/addSubject" element={<AddSubject />} />
             <Route path="/assignExam" element={<AssignExam />} />
+            <Route path="/sectionDetails" element={<SectionDetails />} />
           </Route>
 
         </Route>

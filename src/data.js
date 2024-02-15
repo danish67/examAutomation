@@ -42,7 +42,7 @@ export const menu = [
             {
                 id: 2,
                 title: "Section Details",
-                url: "/users/1",
+                url: "/sectionDetails",
                 icon: "user.svg",
             },
         ],
