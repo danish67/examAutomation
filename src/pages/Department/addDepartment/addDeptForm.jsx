@@ -1,58 +1,125 @@
-import { useState } from "react";
-// import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
+import { useState, useEffect } from "react";
 
 function AddDepartmentForm() {
-  const [startYear, setStartYear] = useState("");
-  const [endYear, setEndYear] = useState("");
-  const [scheme, setScheme] = useState("");
-  const [department, setDepartment] = useState("");
+  const [section, setSection] = useState("");
+  const [deptname, setDeptname] = useState("");
+  const [sections, setSections] = useState([]);
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    fetchSections();
+  }, []);
+
+  const fetchSections = async () => {
+    try {
+      const token =
+      `Token ${localStorage.getItem('token')}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/ViewSection/",
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setSections(data.result);
+      } else {
+        console.error("Failed to fetch sections");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
+
+    try {
+      const token =
+      `Token ${localStorage.getItem('token')}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/departmentAdding/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({
+            name: deptname,
+            section: section,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Department added successfully");
+
+        alert("Department added successfully!");
+        setDeptname("");
+      } else {
+        const data = await response.json();
+        console.error("Failed to add Department:", data.Error);
+
+        alert(`Failed to add Department: ${data.Error}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      alert("An error occurred while processing your request.");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mt-10 ml-10 space-y-12">
-        {/* Existing form content */}
-        {/* You can integrate the new fields here */}
+      <div className="mt-5 ml-5 space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">Department Information</h2>
+          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">
+            Department Information
+          </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
             <div className="sm:col-span-3">
-              <label htmlFor="scheme" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="deptname"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Department Name
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  id="scheme"
-                  name="scheme"
-                  value={scheme}
-                  onChange={(e) => setScheme(e.target.value)}
+                  id="deptname"
+                  name="deptname"
+                  value={deptname}
+                  onChange={(e) => setDeptname(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="section"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Section
               </label>
               <div className="mt-2">
                 <select
-                  id="department"
-                  name="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
+                  id="section"
+                  name="section"
+                  value={section}
+                  onChange={(e) => setSection(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
-                  <option value="engineering">Engineering</option>
-                  <option value="science">Pharmacy</option>
-                  <option value="arts">Architecure</option>
+                  {sections.map((section) => (
+                    <option key={section.value} value={section.value}>
+                      {section.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -60,7 +127,10 @@ function AddDepartmentForm() {
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+          <button
+            type="button"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Cancel
           </button>
           <button
@@ -73,6 +143,6 @@ function AddDepartmentForm() {
       </div>
     </form>
   );
-};
+}
 
 export default AddDepartmentForm;
