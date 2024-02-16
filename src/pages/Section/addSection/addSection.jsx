@@ -7,7 +7,7 @@ function AddSectionForm() {
     event.preventDefault();
   
     try {
-      const token = 'Token 4db920ca6c10ea25038961bf398fed4bd620316f56d7624339fbb1fee7d59175'; 
+      const token = `Token ${localStorage.getItem('token')}`; 
       const response = await fetch("http://127.0.0.1:8000/clgadmin/add_section/", {
         method: "POST",
         headers: {
@@ -24,10 +24,11 @@ function AddSectionForm() {
         console.log("Section added successfully");
 
         alert("Section added successfully!");
+        setSectionName("");
       } else {
 
         const data = await response.json();
-        console.error("helloo Failed to add section:", data.Error);
+        console.error("Failed to add section:", data.Error);
    
         alert(`Failed to add section: ${data.Error}`);
       }
@@ -41,7 +42,7 @@ function AddSectionForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mt-10 ml-10 space-y-12">
+      <div className="mt-5 ml-5 space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">Section Information</h2>
 

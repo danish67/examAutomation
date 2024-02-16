@@ -7,26 +7,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-const SectionDetails = () => {
-    const [sections, setSections] = useState([]);
+const DeptDetails = () => {
+    const [departments, setDepartments] = useState([]);
 
     useEffect(() => {
-        fetchSections();
+        fetchDepartments();
     }, []);
 
-    const fetchSections = async () => {
+    const fetchDepartments = async () => {
         try {
             const token = `Token ${localStorage.getItem('token')}`;
-            const response = await fetch("http://127.0.0.1:8000/clgadmin/ViewSection/", {
+            const response = await fetch("http://127.0.0.1:8000/clgadmin/ViewDepartment/", {
                 headers: {
                     'Authorization': `${token}`
                 }
             });
             if (response.ok) {
                 const data = await response.json();
-                setSections(data.result);
+                setDepartments(data.result);
             } else {
-                console.error('Failed to fetch sections');
+                console.error('Failed to fetch departments');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -34,22 +34,22 @@ const SectionDetails = () => {
     };
 
     return (
-        <div className="sectdetails">
-            <h1 style={{ fontSize: '24px',marginTop: '20px', marginLeft:'20px'}}>Section Details</h1>
+        <div className="deptdetails">
+            <h1 style={{ fontSize: '24px' ,marginTop: '20px', marginLeft:'20px'}}>Department Details</h1>
             <Paper elevation={3} style={{ marginTop: '20px', padding: '20px' }}>
                 <TableContainer>
                     <Table>
                         <TableHead style={{ backgroundColor: '#f0f0f0' }}>
                             <TableRow>
-                                {/* <TableCell>Section ID</TableCell> */}
-                                <TableCell sx={{ fontWeight: 'bold' }}>Section Name</TableCell>
+                                {/* <TableCell>Department ID</TableCell> */}
+                                <TableCell sx={{ fontWeight: 'bold' }}>Department Name</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {sections.map((section, index) => (
+                            {departments.map((department, index) => (
                                 <TableRow key={index}>
-                                    {/* <TableCell>{section.value}</TableCell> */}
-                                    <TableCell>{section.label}</TableCell>
+                                    {/* <TableCell>{department.value}</TableCell> */}
+                                    <TableCell>{department.label}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -60,4 +60,4 @@ const SectionDetails = () => {
     );
 };
 
-export default SectionDetails;
+export default DeptDetails;

@@ -49,6 +49,24 @@ export const menu = [
     },
     {
         id: 4,
+        title: "Department",
+        listItems: [
+            {
+                id: 1,
+                title: "Add Department",
+                url: "/addDepartment",
+                icon: "user.svg",
+            },
+            {
+                id: 2,
+                title: "Department Details",
+                url: "/deptDetails",
+                icon: "user.svg",
+            },
+        ],
+    },
+    {
+        id: 5,
         title: "Batches",
         listItems: [
             {
@@ -65,24 +83,7 @@ export const menu = [
             },
         ],
     },
-    {
-        id: 5,
-        title: "Department",
-        listItems: [
-            {
-                id: 1,
-                title: "Add Department",
-                url: "/addDepartment",
-                icon: "user.svg",
-            },
-            {
-                id: 2,
-                title: "Department Details",
-                url: "/users/1",
-                icon: "user.svg",
-            },
-        ],
-    },
+   
     {
         id: 6,
         title: "Exam",

@@ -86,8 +86,8 @@ const LoginFormSection = ({ onToggleForm }) => {
               var token = data["token"];
               console.log(token);
               AuthCtx.login(token);
-              localStorage.setItem('isLogin', true);
-              navigate("/home", { state: { token: token } });
+              localStorage.setItem('token', token);
+              navigate("/", { state: { token: token } });
               // navigate("/dashboard");
             });
           } else {
