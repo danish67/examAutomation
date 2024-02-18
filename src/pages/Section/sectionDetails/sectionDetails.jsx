@@ -35,14 +35,14 @@ const SectionDetails = () => {
 
     return (
         <div className="sectdetails">
-            <h1 style={{ fontSize: '24px',marginTop: '20px', marginLeft:'20px'}}>Section Details</h1>
+            <h1 style={{ fontSize: '24px',marginTop: '20px', marginLeft:'20px'}}>School Details</h1>
             <Paper elevation={3} style={{ marginTop: '20px', padding: '20px' }}>
                 <TableContainer>
                     <Table>
                         <TableHead style={{ backgroundColor: '#f0f0f0' }}>
                             <TableRow>
                                 {/* <TableCell>Section ID</TableCell> */}
-                                <TableCell sx={{ fontWeight: 'bold' }}>Section Name</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>School Name</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

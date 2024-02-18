@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useContext } from "react";
 // import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import AuthContext from "../../store/auth-context";
 // import { useHistory } from 'react-router-dom';
 const LoginFormSection = ({ onToggleForm }) => {
@@ -16,9 +17,14 @@ const LoginFormSection = ({ onToggleForm }) => {
   const [passwordValid, setPasswordValid] = useState(true); // State to track password validity
   const [remember, setRemember] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const changeValue = (value) => {
     setValue(value);
     console.log(value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
   // const handleEmail = event => {
   //   setEmail(event.target.value)
@@ -210,7 +216,7 @@ const LoginFormSection = ({ onToggleForm }) => {
               onChange={handleEmail}
             />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-600"
@@ -225,6 +231,27 @@ const LoginFormSection = ({ onToggleForm }) => {
               placeholder="Enter your password"
               onChange={handlePass}
             />
+          </div> */}
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-600">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'} // Show password if showPassword is true
+                id="password"
+                name="password"
+                className="mt-1 p-2 border border-slate-300 rounded-md w-full focus:border-mediumslateblue-200 focus:outline-none ring-0"
+                placeholder="Enter your password"
+                onChange={handlePass}
+              />
+              {/* Eye icon button */}
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 flex items-center px-3 focus:outline-none"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <div className="mb-4 flex items-center">
             <input

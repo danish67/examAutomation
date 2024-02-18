@@ -1,4 +1,6 @@
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 // import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 function AddBatchForm() {
@@ -6,7 +8,7 @@ function AddBatchForm() {
   const [endYear, setEndYear] = useState("");
   const [scheme, setScheme] = useState("");
   const [department, setDepartment] = useState("");
-
+  const currentYear = new Date().getFullYear();
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission logic here
@@ -19,20 +21,40 @@ function AddBatchForm() {
         {/* You can integrate the new fields here */}
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">Batch Information</h2>
+          <div className="mt-10 sm:col-span-3">
+              <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
+                Department
+              </label>
+              <div className="mt-2">
+                <select
+                  id="department"
+                  name="department"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                >
+                  <option value="engineering">Engineering</option>
+                  <option value="science">Science</option>
+                  <option value="arts">Arts</option>
+                </select>
+              </div>
+            </div>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-3">
+          <div className="sm:col-span-3">
               <label htmlFor="start-year" className="block text-sm font-medium leading-6 text-gray-900">
                 Start Year
               </label>
               <div className="mt-2">
-                <input
-                  type="number"
-                  id="start-year"
-                  name="start-year"
-                  value={startYear}
-                  onChange={(e) => setStartYear(e.target.value)}
+                <DatePicker
+                  selected={startYear}
+                  onChange={(date) => setStartYear(date)}
+                  showYearPicker
+                  dateFormat="yyyy"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  minDate={new Date(currentYear, 0)}
+                  // yearRange={currentYear + ":" + (currentYear + 100)}
+                  
                 />
               </div>
             </div>
@@ -42,13 +64,14 @@ function AddBatchForm() {
                 End Year
               </label>
               <div className="mt-2">
-                <input
-                  type="number"
-                  id="end-year"
-                  name="end-year"
-                  value={endYear}
-                  onChange={(e) => setEndYear(e.target.value)}
+                <DatePicker
+                  selected={endYear}
+                  onChange={(date) => setEndYear(date)}
+                  showYearPicker
+                  dateFormat="yyyy"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  minDate={new Date(currentYear, 0)}
+                  // yearRange={currentYear + ":" + (currentYear + 100)}
                 />
               </div>
             </div>
@@ -69,24 +92,7 @@ function AddBatchForm() {
               </div>
             </div>
 
-            <div className="sm:col-span-3">
-              <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
-                Department
-              </label>
-              <div className="mt-2">
-                <select
-                  id="department"
-                  name="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option value="engineering">Engineering</option>
-                  <option value="science">Science</option>
-                  <option value="arts">Arts</option>
-                </select>
-              </div>
-            </div>
+           
           </div>
         </div>
 

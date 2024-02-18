@@ -31,17 +31,17 @@ export const menu = [
     },
     {
         id: 3,
-        title: "Section",
+        title: "School",
         listItems: [
             {
                 id: 1,
-                title: "Add Section",
+                title: "Add School",
                 url: "/addSection",
                 icon: "setting.svg",
             },
             {
                 id: 2,
-                title: "Section Details",
+                title: "School Details",
                 url: "/sectionDetails",
                 icon: "user.svg",
             },
