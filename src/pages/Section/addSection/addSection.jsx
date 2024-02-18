@@ -44,12 +44,12 @@ function AddSectionForm() {
     <form onSubmit={handleSubmit}>
       <div className="mt-5 ml-5 space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">Section Information</h2>
+          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">School Information</h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label htmlFor="sectionName" className="block text-sm font-medium leading-6 text-gray-900">
-                Section Name
+              School Name
               </label>
               <div className="mt-2">
                 <input
