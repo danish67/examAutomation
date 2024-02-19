@@ -8,11 +8,49 @@ function AddBatchForm() {
   const [scheme, setScheme] = useState("");
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState([]);
+  const [deptID, setDeptID] = useState();
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     fetchDepartments();
   }, []);
+  useEffect(() => {
+    handleDepartmentChange(department);
+    console.log("abe 2nd me haiu");
+  }, [startYear]);
+
+  const getValueFromLabel = async (label) => {
+    try {
+      const dept = departments.find((dept) => dept.label === label);
+      console.log("dept");
+      console.log(dept.value);
+  
+      // Simulate an asynchronous operation (e.g., API call)
+      await someAsyncOperation();
+  
+      // Update the state (setDeptID) with the obtained value
+      setDeptID(dept.value);
+  
+      console.log("selected deptID");
+      console.log(deptID);
+  
+      return dept.value;
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle errors if necessary
+    }
+  };
+  
+  const someAsyncOperation = () => {
+    // Simulate an asynchronous operation, for example, an API call
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log("Async operation completed");
+        resolve();
+      }, 1000); // Simulating a 1-second delay
+    });
+  };
+  
 
   const fetchDepartments = async () => {
     try {
@@ -28,6 +66,7 @@ function AddBatchForm() {
       if (response.ok) {
         const data = await response.json();
         setDepartments(data.result);
+        console.log("Yaha aarha");
         console.log(departments);
       } else {
         console.error("Failed to fetch departments");
@@ -52,34 +91,34 @@ function AddBatchForm() {
 
   const handleDepartmentChange = (selectedSection) => {
     console.log("Selected Section:", selectedSection);
-    if (selectedSection) {
-      const associatedDepartment = departments.find(
-        (dept) => dept.section === selectedSection
-      );
-      console.log("Associated Department:", associatedDepartment);
-      if (associatedDepartment) {
-        // If associated department is found, update the state with the department name
-        setDepartment(associatedDepartment.name); // Set department name
-        // Calculate and set end year based on start year and department
-        if (startYear) {
-          let endYearValue = new Date(startYear);
-          if (
-            selectedSection === "School of Pharmacy" ||
-            selectedSection === "School of Architecture"
-          ) {
-            endYearValue.setFullYear(endYearValue.getFullYear() + 5);
-          } else if (selectedSection === "School of Engineering") {
-            endYearValue.setFullYear(endYearValue.getFullYear() + 4);
-          }
-          setEndYear(endYearValue);
-        }
+
+    if (selectedSection && selectedSection !== department) {
+      console.log("selectedSection:", selectedSection);
+
+      // Update the state only if the selectedSection is different from the current department
+      setDepartment(selectedSection);
+      console.log(department);
+      // Calculate and set end year based on start year and department
+    }
+    if (startYear) {
+      let endYearValue = new Date(startYear);
+      if (selectedSection === "Architecture") {
+        endYearValue.setFullYear(endYearValue.getFullYear() + 5);
+      } else {
+        endYearValue.setFullYear(endYearValue.getFullYear() + 4);
       }
+      console.log(endYearValue);
+      setEndYear(endYearValue);
+      console.log("endYear");
+      console.log(endYear);
     }
   };
 
   const handleSubmit = async (event) => {
     // setDepartment(associatedDepartment.value);
-    // console.log(department)
+    getValueFromLabel(department);
+    console.log("deptID");
+    console.log(deptID);
     event.preventDefault();
     try {
       const token = `Token ${localStorage.getItem("token")}`;
@@ -92,9 +131,9 @@ function AddBatchForm() {
             Authorization: `${token}`,
           },
           body: JSON.stringify({
+            department: deptID,
             start_year: startYear.getFullYear(),
             end_year: endYear.getFullYear(),
-            department: department,
             scheme: scheme,
           }),
         }
@@ -143,7 +182,7 @@ function AddBatchForm() {
               >
                 <option value="">Select Department</option>
                 {departments.map((department) => (
-                  <option key={department.value} value={department.section}>
+                  <option key={department.value} value={department.label}>
                     {department.label}
                   </option>
                 ))}
