@@ -1,48 +1,162 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 function AddBatchForm() {
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [scheme, setScheme] = useState("");
   const [department, setDepartment] = useState("");
+  const [departments, setDepartments] = useState([]);
   const currentYear = new Date().getFullYear();
-  const handleSubmit = (event) => {
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const token = `Token ${localStorage.getItem("token")}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/ViewDepartment/",
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setDepartments(data.result);
+        console.log(departments);
+      } else {
+        console.error("Failed to fetch departments");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // const handleDepartmentChange = (selectedSection) => {
+  //   const associatedDepartment = departments.find(dept => dept.section === selectedSection);
+  //   setDepartment(associatedDepartment.name);
+
+  //   let endYearValue = startYear ? new Date(startYear) : null;
+  //   if (selectedSection === "School of Pharmacy" || selectedSection === "School of Architecture") {
+  //     endYearValue.setFullYear(endYearValue.getFullYear() + 5);
+  //   } else if (selectedSection === "School of Engineering") {
+  //     endYearValue = new Date(endYearValue.getFullYear() + 4, endYearValue.getMonth(), endYearValue.getDate());
+  //   }
+  //   setEndYear(endYearValue);
+  // };
+
+  const handleDepartmentChange = (selectedSection) => {
+    console.log("Selected Section:", selectedSection);
+    if (selectedSection) {
+      const associatedDepartment = departments.find(
+        (dept) => dept.section === selectedSection
+      );
+      console.log("Associated Department:", associatedDepartment);
+      if (associatedDepartment) {
+        // If associated department is found, update the state with the department name
+        setDepartment(associatedDepartment.name); // Set department name
+        // Calculate and set end year based on start year and department
+        if (startYear) {
+          let endYearValue = new Date(startYear);
+          if (
+            selectedSection === "School of Pharmacy" ||
+            selectedSection === "School of Architecture"
+          ) {
+            endYearValue.setFullYear(endYearValue.getFullYear() + 5);
+          } else if (selectedSection === "School of Engineering") {
+            endYearValue.setFullYear(endYearValue.getFullYear() + 4);
+          }
+          setEndYear(endYearValue);
+        }
+      }
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    // setDepartment(associatedDepartment.value);
+    // console.log(department)
     event.preventDefault();
-    // Handle form submission logic here
+    try {
+      const token = `Token ${localStorage.getItem("token")}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/BatchAdding/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({
+            start_year: startYear.getFullYear(),
+            end_year: endYear.getFullYear(),
+            department: department,
+            scheme: scheme,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        alert(data); // Display success message
+        // Clear input fields after successful submission
+        setStartYear("");
+        setEndYear("");
+        setDepartment("");
+        setScheme("");
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to add batch:", errorData.error);
+        alert(`Failed to add batch: ${errorData.error}`); // Display error message
+        alert("nahi ho rha"); // Display error message
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while processing your request.");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-10 ml-10 space-y-12">
-        {/* Existing form content */}
-        {/* You can integrate the new fields here */}
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">Batch Information</h2>
+          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">
+            Batch Information
+          </h2>
           <div className="mt-10 sm:col-span-3">
-              <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
-                Department
-              </label>
-              <div className="mt-2">
-                <select
-                  id="department"
-                  name="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option value="engineering">Engineering</option>
-                  <option value="science">Science</option>
-                  <option value="arts">Arts</option>
-                </select>
-              </div>
+            <label
+              htmlFor="department"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Department
+            </label>
+            <div className="mt-2">
+              <select
+                id="department"
+                name="department"
+                value={department}
+                onChange={(e) => handleDepartmentChange(e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option value="">Select Department</option>
+                {departments.map((department) => (
+                  <option key={department.value} value={department.section}>
+                    {department.label}
+                  </option>
+                ))}
+              </select>
             </div>
+          </div>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          <div className="sm:col-span-3">
-              <label htmlFor="start-year" className="block text-sm font-medium leading-6 text-gray-900">
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="start-year"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Start Year
               </label>
               <div className="mt-2">
@@ -53,14 +167,15 @@ function AddBatchForm() {
                   dateFormat="yyyy"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   minDate={new Date(currentYear, 0)}
-                  // yearRange={currentYear + ":" + (currentYear + 100)}
-                  
                 />
               </div>
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="end-year" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="end-year"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 End Year
               </label>
               <div className="mt-2">
@@ -71,13 +186,16 @@ function AddBatchForm() {
                   dateFormat="yyyy"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   minDate={new Date(currentYear, 0)}
-                  // yearRange={currentYear + ":" + (currentYear + 100)}
+                  disabled
                 />
               </div>
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="scheme" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="scheme"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Scheme
               </label>
               <div className="mt-2">
@@ -91,13 +209,14 @@ function AddBatchForm() {
                 />
               </div>
             </div>
-
-           
           </div>
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+          <button
+            type="button"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Cancel
           </button>
           <button
@@ -110,6 +229,6 @@ function AddBatchForm() {
       </div>
     </form>
   );
-};
+}
 
 export default AddBatchForm;
