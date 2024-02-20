@@ -1,18 +1,163 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 function AddManually() {
-  const [startYear, setStartYear] = useState("");
-  const [endYear, setEndYear] = useState("");
-  const [scheme, setScheme] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [category, setCategory] = useState("");
+  const [gender, setGender] = useState("");
+  const [student_type, setStudent_type] = useState("");
+  const [batch, setBatch] = useState("");
+  const [batches, setBatches] = useState([]);
   const [department, setDepartment] = useState("");
+  const [departments, setDepartments] = useState([]);
+  const [deptID, setDeptID] = useState();
 
-  const handleSubmit = (event) => {
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  useEffect(() => {
+    fetchBatches();
+  }, [department]);
+
+  const getValueFromLabel = async (label) => {
+    try {
+      const dept = departments.find((dept) => dept.label === label);
+      // console.log("dept");
+      // console.log(dept.value);
+  
+      // Simulate an asynchronous operation (e.g., API call)
+      setDeptID(dept.value);
+      await someAsyncOperation();
+  
+      // Update the state (setDeptID) with the obtained value
+  
+      console.log("selected deptID yeh hai");
+      console.log(deptID);
+  
+      return dept.value;
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle errors if necessary
+    }
+  };
+  
+  const someAsyncOperation = () => {
+    // Simulate an asynchronous operation, for example, an API call
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log("Async operation completed");
+        resolve();
+      }, 500); // Simulating a 1-second delay
+    });
+  };
+  
+  
+  const fetchBatches = async () => {
+    console.log(deptID);
+    if (deptID !== null && deptID !== undefined){
+      try {
+        const token = `Token ${localStorage.getItem("token")}`;
+        const response = await fetch(
+          "http://127.0.0.1:8000/clgadmin/ViewBatches/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json", 
+              Authorization: `${token}`,
+            },
+            body: JSON.stringify({
+              department: deptID,
+            }),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data.result)
+          setBatches(data.result);
+          
+        } else {
+          console.error("Failed to fetch Batches");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchDepartments = async () => {
+    try {
+      const token = `Token ${localStorage.getItem("token")}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/ViewDepartment/",
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setDepartments(data.result);
+      } else {
+        console.error("Failed to fetch departments");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
+
+    try {
+      const token = `Token ${localStorage.getItem("token")}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/manually_student/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            category: category,
+            gender: gender,
+            student_type: student_type,
+            batch: batch,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Student added successfully");
+
+        alert("Student added successfully!");
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setCategory("");
+        setGender("");
+        setDepartment("");
+        setBatch("");
+        setStudent_type("");
+      } else {
+        const data = await response.json();
+        console.error("Failed to add section:", data.Error);
+
+        alert(`Failed to add section: ${data.Error}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      alert("An error occurred while processing your request.");
+    }
   };
 
   return (
@@ -54,7 +199,7 @@ function AddManually() {
               </label>
               <div className="mt-2">
                 <input
-                  type="lastname"
+                  type="text"
                   id="lastname"
                   name="lastname"
                   value={lastName}
@@ -94,14 +239,14 @@ function AddManually() {
                 <select
                   id="category"
                   name="category"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Select Category</option>
-                  <option value="open">OPEN</option>
-                  <option value="ebc">EBC</option>
-                  <option value="obc">OBC</option>
+                  <option value="OPEN">OPEN</option>
+                  <option value="EBC">EBC</option>
+                  <option value="OBC">OBC</option>
                 </select>
               </div>
             </div>
@@ -114,15 +259,15 @@ function AddManually() {
               </label>
               <div className="mt-2">
                 <select
-                  id="department"
-                  name="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
+                  id="gender"
+                  name="gender"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Select Gender</option>
-                  <option value="engineering">Male</option>
-                  <option value="science">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
               </div>
             </div>
@@ -135,19 +280,47 @@ function AddManually() {
               </label>
               <div className="mt-2">
                 <select
-                  id="department"
-                  name="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
+                  id="student_type"
+                  name="student_type"
+                  value={student_type}
+                  onChange={(e) => setStudent_type(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Select Student Type</option>
-                  <option value="engineering">E</option>
-                  <option value="science">D</option>
+                  <option value="E">E</option>
+                  <option value="D">D</option>
                 </select>
               </div>
             </div>
-           
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="department"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Department
+              </label>
+              <div className="mt-2">
+                <select
+                  id="department"
+                  name="department"
+                  value={department}
+                  onChange={(e) => {
+                    const selectedDepartment = e.target.value;
+                    console.log(selectedDepartment);
+                    setDepartment(selectedDepartment);
+                    getValueFromLabel(selectedDepartment);
+                  }}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((department) => (
+                    <option key={department.value} value={department.label}>
+                      {department.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
             <div className="sm:col-span-3">
               <label
                 htmlFor="department"
@@ -157,15 +330,19 @@ function AddManually() {
               </label>
               <div className="mt-2">
                 <select
-                  id="department"
-                  name="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
+                  id="batch"
+                  name="batch"
+                  value={batch}
+                  onChange={(e) => setBatch(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  disabled={!department}
                 >
                   <option value="">Select Batch</option>
-                  <option value="engineering">2020-2024 CO</option>
-                  <option value="science">2020-2024 ET</option>
+                  {batches.map((batch) => (
+                    <option key={batch.value} value={batch.value}>
+                      {batch.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
