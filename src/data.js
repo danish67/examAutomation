@@ -33,12 +33,12 @@ export const menu = [
         id: 3,
         title: "School",
         listItems: [
-            {
-                id: 1,
-                title: "Add School",
-                url: "/addSection",
-                icon: "setting.svg",
-            },
+            // {
+            //     id: 1,
+            //     title: "Add School",
+            //     url: "/addSection",
+            //     icon: "setting.svg",
+            // },
             {
                 id: 2,
                 title: "School Details",
@@ -78,7 +78,7 @@ export const menu = [
             {
                 id: 2,
                 title: "Batch Details",
-                url: "/users/1",
+                url: "/batchDetails",
                 icon: "user.svg",
             },
         ],

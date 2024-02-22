@@ -5,7 +5,19 @@
   padding: 30px;
   background-color: white;
 
+  .logo{
+    width: 35px;
+      height: 35px;
+      object-fit: cover;
+  }
+  
+  .logotxt{
+    display: flex;
+    align-items: center;
+  }
+
   span{
+    
 
     &:first-child{
       font-weight: bold;
@@ -13,6 +25,7 @@
 
     &:last-child{
       font-size: 14px;
+      padding-left: 5px;
     }
   }
 }

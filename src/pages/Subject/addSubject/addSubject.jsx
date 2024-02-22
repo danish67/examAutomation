@@ -1,17 +1,88 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 function AddSubject() {
-  const [startYear, setStartYear] = useState("");
-  const [endYear, setEndYear] = useState("");
+  const [subjectName, setSubjectName] = useState("");
+  const [subjectCode, setSubjectCode] = useState("");
   const [scheme, setScheme] = useState("");
+  const [semester, setSemester] = useState();
   const [department, setDepartment] = useState("");
+  const [departments, setDepartments] = useState([]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle form submission logic here
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const token = `Token ${localStorage.getItem("token")}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/ViewDepartment/",
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setDepartments(data.result);
+      } else {
+        console.error("Failed to fetch departments");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("SubjectName: " + subjectName);
+    console.log("SubjectCode: " + subjectCode);
+    console.log("Scheme: " + scheme);
+    console.log("semester: " + semester);
+    console.log("department: " + department);
+    try {
+      const token = `Token ${localStorage.getItem("token")}`;
+      const response = await fetch(
+        "http://127.0.0.1:8000/clgadmin/add_subject/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({
+            name: subjectName,
+            subjectcode: subjectCode,
+            scheme: scheme,
+            semester: semester,
+            department: department,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Subject added successfully");
+
+        alert("Subject added successfully!");
+        setSubjectName("");
+        setSubjectCode("");
+        setScheme("");
+        setSemester("");
+        setDepartment("");
+      } else {
+        const data = await response.json();
+        console.error("Failed to add Subject:", data.Error);
+
+        alert(`Failed to add Subject: ${data.Error}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      alert("An error occurred while processing your request.");
+    }
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-10 ml-10 space-y-12">
@@ -28,37 +99,39 @@ function AddSubject() {
                 htmlFor="scheme"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Subject Name
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  id="scheme"
-                  name="scheme"
-                  value={scheme}
-                  onChange={(e) => setScheme(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="scheme"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
                 Subject Code
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  id="scheme"
-                  name="scheme"
-                  value={scheme}
-                  onChange={(e) => setScheme(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  id="subjectcode"
+                  name="subjectcode"
+                  value={subjectCode}
+                  onChange={(e) => setSubjectCode(e.target.value)}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
+
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="scheme"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Subject Name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  id="subjectname"
+                  name="subjectname"
+                  value={subjectName}
+                  onChange={(e) => setSubjectName(e.target.value)}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
             <div className="sm:col-span-3">
               <label
                 htmlFor="scheme"
@@ -73,14 +146,14 @@ function AddSubject() {
                   name="scheme"
                   value={scheme}
                   onChange={(e) => setScheme(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="start-year"
+                htmlFor="semester"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Semester
@@ -88,11 +161,11 @@ function AddSubject() {
               <div className="mt-2">
                 <input
                   type="number"
-                  id="start-year"
-                  name="start-year"
-                  value={startYear}
-                  onChange={(e) => setStartYear(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  id="semester"
+                  name="semester"
+                  value={semester}
+                  onChange={(e) => setSemester(e.target.value)}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -108,12 +181,19 @@ function AddSubject() {
                   id="department"
                   name="department"
                   value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  onChange={(e) => {
+                    const selectedDepartment = e.target.value;
+                    console.log(selectedDepartment);
+                    setDepartment(selectedDepartment);
+                  }}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
-                  <option value="engineering">Engineering</option>
-                  <option value="science">Pharmacy</option>
-                  <option value="arts">Architecure</option>
+                  <option value="">Select Department</option>
+                  {departments.map((department) => (
+                    <option key={department.value} value={department.value}>
+                      {department.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
