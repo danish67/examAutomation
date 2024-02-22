@@ -33,6 +33,7 @@ import StudentDetails from "./pages/Student/studentDetails/studentDetails";
 import PageNotFound from "./pages/Erropages/pageNotFound";
 import SectionDetails from "./pages/Section/sectionDetails/sectionDetails";
 import DeptDetails from "./pages/Department/departmentDetails/deptDetails";
+import BatchDetails from "./pages/Batch/batchDetails/batchdetails";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,8 @@ function App() {
             <Route path="/assignExam" element={<AssignExam />} />
             <Route path="/sectionDetails" element={<SectionDetails />} />
             <Route path="/deptDetails" element={<DeptDetails />} />
+            <Route path="/batchDetails" element={<BatchDetails/>} />
+            
           </Route>
 
         </Route>
