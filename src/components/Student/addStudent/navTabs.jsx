@@ -6,6 +6,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import AddManually from "./addManually";
 import AddExcel from "./addExcel";
+import "./NavTabs.scss"; 
 
 function LinkTab(props) {
   return (
@@ -17,6 +18,7 @@ LinkTab.propTypes = {
   label: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
 };
+
 export default function NavTabs() {
   return (
     <Box sx={{ width: "100%" }}>
