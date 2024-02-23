@@ -34,6 +34,19 @@ function AddSubject() {
       console.error("Error:", error);
     }
   };
+  const setMaxValuefunction = () => {
+    console.log("yeh department hai"+ department);
+    try {
+      if (department === "Architecture"){
+        setMaxValue(10);
+      }
+      else{
+        setMaxValue(8);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -83,6 +96,15 @@ function AddSubject() {
       alert("An error occurred while processing your request.");
     }
   };
+
+  const clearAll = () => {
+    setSubjectName("");
+    setSubjectCode("");
+    setScheme("");
+    setSemester("");
+    setDepartment("");
+};
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-10 ml-10 space-y-12">
@@ -204,6 +226,7 @@ function AddSubject() {
           <button
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={clearAll}
           >
             Cancel
           </button>
