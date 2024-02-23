@@ -158,6 +158,13 @@ function AddBatchForm() {
     }
   };
 
+  const clearAll = () => {
+    setStartYear("");
+    setEndYear("");
+    setDepartment("");
+    setScheme("");
+};
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-10 ml-10 space-y-12">
@@ -255,6 +262,7 @@ function AddBatchForm() {
           <button
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={clearAll}
           >
             Cancel
           </button>

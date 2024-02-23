@@ -14,6 +14,7 @@ function AddExam() {
   const currentYear = new Date().getFullYear();
   const [typeOfExam, setTypeOfExam] = useState("");
   const [semester, setSemester] = useState();
+  const[maxValue,setMaxValue] = useState();
 
 
 
@@ -25,16 +26,21 @@ function AddExam() {
     fetchBatches();
   }, [department]);
 
+  useEffect(() => {
+    setMaxValuefunction();
+  }, [department]);
+
+
   const getValueFromLabel = async (label) => {
     try {
       const dept = departments.find((dept) => dept.label === label);
       // console.log("dept");
       // console.log(dept.value);
-  
       // Simulate an asynchronous operation (e.g., API call)
       setDeptID(dept.value);
       // await someAsyncOperation();
-  
+      
+      setMaxValuefunction();
       // Update the state (setDeptID) with the obtained value
   
       console.log("selected deptID yeh hai");
@@ -46,6 +52,21 @@ function AddExam() {
       // Handle errors if necessary
     }
   };
+
+  const setMaxValuefunction = () => {
+    console.log("yeh department hai"+ department);
+    try {
+      if (department === "Architecture"){
+        setMaxValue(10);
+      }
+      else{
+        setMaxValue(8);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   
   const someAsyncOperation = () => {
     // Simulate an asynchronous operation, for example, an API call
@@ -156,6 +177,17 @@ function AddExam() {
       alert("An error occurred while processing your request.");
     }
   };
+
+  const clearAll = () => {
+        setDepartment("");
+        setBatch("");
+        setMonth("");
+        setYear("");
+        setTypeOfExam("");
+        setSemester("");
+  };
+
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -291,7 +323,11 @@ function AddExam() {
                   id="semester"
                   name="semester"
                   value={semester}
+                  min={1}
+                  max={maxValue}
+                  // max={10}
                   onChange={(e) => setSemester(e.target.value)}
+                  disabled={!department}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -303,7 +339,7 @@ function AddExam() {
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+          <button type="button" onClick={clearAll} className="text-sm font-semibold leading-6 text-gray-900">
             Cancel
           </button>
           <button

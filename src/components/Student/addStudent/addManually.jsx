@@ -160,6 +160,17 @@ function AddManually() {
     }
   };
 
+  const clearAll = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setCategory("");
+    setGender("");
+    setDepartment("");
+    setBatch("");
+    setStudent_type("");
+};
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-5 ml-10 space-y-12">
@@ -353,6 +364,7 @@ function AddManually() {
           <button
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={clearAll}
           >
             Cancel
           </button>

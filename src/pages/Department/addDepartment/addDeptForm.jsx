@@ -59,6 +59,7 @@ function AddDepartmentForm() {
 
         alert("Department added successfully!");
         setDeptname("");
+        setSection("");
       } else {
         const data = await response.json();
         console.error("Failed to add Department:", data.Error);
@@ -72,6 +73,11 @@ function AddDepartmentForm() {
     }
   };
 
+  const clearAll = () => {
+    setDeptname("");
+    setSection("");
+  };
+  
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-5 ml-5 space-y-12">
@@ -131,6 +137,7 @@ function AddDepartmentForm() {
           <button
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={clearAll}
           >
             Cancel
           </button>
