@@ -26,10 +26,17 @@
       gap: 10px;
       padding: 10px;
       border-radius: 5px;
+      font-size: 15px;
+      font-weight: 700;
 
       &:hover {
         background-color: $soft-color;
       }
+
+      &.selected {
+        background-color: #a0c0ff;
+      }
+      
 
       .listItemTitle{
         @include lg{

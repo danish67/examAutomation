@@ -173,7 +173,7 @@ function AddManually() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mt-5 ml-10 space-y-12">
+      <div className="mt-5 ml-10   space-y-12">
         {/* Existing form content */}
         {/* You can integrate the new fields here */}
         <div className="border-b border-gray-900/10 pb-12">

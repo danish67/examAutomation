@@ -7,18 +7,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-const SectionDetails = () => {
-  const [sections, setSections] = useState([]);
+const FacultyDetails = () => {
+  const [faculties, setFaculties] = useState([]);
 
   useEffect(() => {
-    fetchSections();
+    fetchFaculties();
   }, []);
 
-  const fetchSections = async () => {
+  const fetchFaculties = async () => {
     try {
       const token = `Token ${localStorage.getItem("token")}`;
       const response = await fetch(
-        "http://127.0.0.1:8000/clgadmin/ViewSection/",
+        "http://127.0.0.1:8000/clgadmin/fetch_faculty/",
         {
           headers: {
             Authorization: `${token}`,
@@ -27,7 +27,8 @@ const SectionDetails = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setSections(data.result);
+        setFaculties(data.result);
+        console.log("data.result" + data.result);
       } else {
         console.error("Failed to fetch sections");
       }
@@ -37,9 +38,9 @@ const SectionDetails = () => {
   };
 
   return (
-    <div className="sectdetails">
+    <div className="factdetails">
       <h1 style={{ fontSize: "24px", marginTop: "20px", marginLeft: "20px" }}>
-        School Details
+        Faculty Details
       </h1>
       <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
         <TableContainer>
@@ -47,14 +48,16 @@ const SectionDetails = () => {
             <TableHead style={{ backgroundColor: "#f0f0f0" }}>
               <TableRow>
                 {/* <TableCell>Section ID</TableCell> */}
-                <TableCell sx={{ fontWeight: "bold" }}>School Name</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {sections.map((section, index) => (
+              {faculties.map((faculty, index) => (
                 <TableRow key={index}>
                   {/* <TableCell>{section.value}</TableCell> */}
-                  <TableCell>{section.label}</TableCell>
+                  <TableCell>
+                    {`${faculty.firstname} ${faculty.lastname}`}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -65,4 +68,4 @@ const SectionDetails = () => {
   );
 };
 
-export default SectionDetails;
+export default FacultyDetails;

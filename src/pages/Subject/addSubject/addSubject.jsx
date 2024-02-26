@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Multiselect from "multiselect-react-dropdown";
 // import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 function AddSubject() {
@@ -8,10 +9,27 @@ function AddSubject() {
   const [semester, setSemester] = useState();
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState([]);
+  const [subjectDept, setSubjectDept] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
 
   useEffect(() => {
     fetchDepartments();
   }, []);
+
+  const onSelect = (selectedList, selectedItem) => {
+    setSubjectDept([])
+    setSelectedDepartments(selectedList);
+    // console.log(selectedItem);
+    // console.log(selectedList);
+
+    // console.log("selectedDepartments" + selectedDepartments);
+  };
+  const onRemove = (selectedList, removedItem) => {
+    setSubjectDept([])
+    setSelectedDepartments(selectedList);
+    // console.log("removedItem" + removedItem);
+    // console.log("selectedDepartments" + selectedDepartments);
+  };
 
   const fetchDepartments = async () => {
     try {
@@ -35,12 +53,11 @@ function AddSubject() {
     }
   };
   const setMaxValuefunction = () => {
-    console.log("yeh department hai"+ department);
+    console.log("yeh department hai" + department);
     try {
-      if (department === "Architecture"){
+      if (department === "Architecture") {
         setMaxValue(10);
-      }
-      else{
+      } else {
         setMaxValue(8);
       }
     } catch (error) {
@@ -55,6 +72,11 @@ function AddSubject() {
     console.log("Scheme: " + scheme);
     console.log("semester: " + semester);
     console.log("department: " + department);
+    selectedDepartments.forEach((item) => {
+      subjectDept.push(item.value);
+      // console.log(item.value);
+    });
+    console.log("subjectDept"+subjectDept);
     try {
       const token = `Token ${localStorage.getItem("token")}`;
       const response = await fetch(
@@ -70,7 +92,7 @@ function AddSubject() {
             subjectcode: subjectCode,
             scheme: scheme,
             semester: semester,
-            department: department,
+            department: subjectDept,
           }),
         }
       );
@@ -103,14 +125,14 @@ function AddSubject() {
     setScheme("");
     setSemester("");
     setDepartment("");
-};
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-10 ml-10 space-y-12">
         {/* Existing form content */}
         {/* You can integrate the new fields here */}
-        <div className="border-b border-gray-900/10 pb-12">
+        <div className=" border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">
             Subject Information
           </h2>
@@ -191,7 +213,7 @@ function AddSubject() {
                 />
               </div>
             </div>
-            <div className="sm:col-span-3">
+            {/* <div className="sm:col-span-3">
               <label
                 htmlFor="department"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -199,7 +221,7 @@ function AddSubject() {
                 Department
               </label>
               <div className="mt-2">
-                <select
+                <select multiple
                   id="department"
                   name="department"
                   value={department}
@@ -217,6 +239,38 @@ function AddSubject() {
                     </option>
                   ))}
                 </select>
+              </div>
+            </div> */}
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="department"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Department
+              </label>
+              <div className="mt-2">
+                <Multiselect
+                  options={departments}
+                  selectedValues={selectedDepartments}
+                  onSelect={onSelect}
+                  onRemove={onRemove}
+                  displayValue="label"
+                  closeIcon="cancel"
+                  placeholder="Select Department"
+                  style={{
+                    multiselectContainer: {
+                      width: "100%",
+                    },
+                    chips: {
+                      background: "#6366F1",
+                    },
+                    searchBox: {
+                      border: "none",
+                      "border-bottom": "1px solid blue",
+                      "border-radius": "0px",
+                    },
+                  }}
+                />
               </div>
             </div>
           </div>
