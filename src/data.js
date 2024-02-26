@@ -7,7 +7,7 @@ export const menu = [
                 id: 1,
                 title: "Main",
                 url: "/home",
-                icon: "home.svg",
+                icon: "home.png",
             },
         ],
     },
@@ -19,7 +19,7 @@ export const menu = [
                 id: 1,
                 title: "Add Student",
                 url: "/addStudent",
-                icon: "home.svg",
+                icon: "add.png",
             },
             {
                 id: 2,
@@ -31,6 +31,24 @@ export const menu = [
     },
     {
         id: 3,
+        title: "Faculty",
+        listItems: [
+            {
+                id: 1,
+                title: "Faculty Details",
+                url: "/facultyDetails",
+                icon: "faculty.png",
+            },
+            // {
+            //     id: 2,
+            //     title: "Student Details",
+            //     url: "/studentDeatils",
+            //     icon: "user.svg",
+            // },
+        ],
+    },
+    {
+        id: 4,
         title: "School",
         listItems: [
             // {
@@ -43,98 +61,98 @@ export const menu = [
                 id: 2,
                 title: "School Details",
                 url: "/sectionDetails",
-                icon: "user.svg",
+                icon: "school.png",
             },
         ],
     },
     {
-        id: 4,
+        id: 5,
         title: "Department",
         listItems: [
             {
                 id: 1,
                 title: "Add Department",
                 url: "/addDepartment",
-                icon: "user.svg",
+                icon: "add.png",
             },
             {
                 id: 2,
                 title: "Department Details",
                 url: "/deptDetails",
-                icon: "user.svg",
+                icon: "department.png",
             },
         ],
     },
     {
-        id: 5,
+        id: 6,
         title: "Batches",
         listItems: [
             {
                 id: 1,
                 title: "Add Batch",
                 url: "/addBatch",
-                icon: "element.svg",
+                icon: "add.png",
             },
             {
                 id: 2,
                 title: "Batch Details",
                 url: "/batchDetails",
-                icon: "user.svg",
+                icon: "batch.png",
             },
         ],
     },
    
     {
-        id: 6,
+        id: 7,
         title: "Exam",
         listItems: [
             {
                 id: 1,
                 title: "Add Exam",
                 url: "/addExam",
-                icon: "chart.svg",
+                icon: "add.png",
             },
             {
                 id: 3,
                 title: "Assign Exam",
                 url: "/assignExam",
-                icon: "log.svg",
+                icon: "assignexam.png",
             },
             {
                 id: 2,
                 title: "Exam Details",
                 url: "/",
-                icon: "log.svg",
+                icon: "examdetails.png",
             },
         ],
     },
     {
-        id: 7,
+        id: 8,
         title: "Subjects",
         listItems: [
             {
                 id: 1,
                 title: "Add Subject",
                 url: "/addSubject",
-                icon: "chart.svg",
+                icon: "add.png",
             },
             {
                 id: 2,
                 title: "Subject Details",
-                url: "/",
-                icon: "log.svg",
+                url: "/fetchSubjects",
+                icon: "subject.png",
             },
         ],
     },
     {
-        id: 8,
+        id: 9,
         title: "Marks",
         listItems: [
             {
                 id: 1,
                 title: "Assign Marks",
                 url: "/",
-                icon: "chart.svg",
+                icon: "marks.png",
             },
         ],
     },

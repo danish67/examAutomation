@@ -34,6 +34,8 @@ import PageNotFound from "./pages/Erropages/pageNotFound";
 import SectionDetails from "./pages/Section/sectionDetails/sectionDetails";
 import DeptDetails from "./pages/Department/departmentDetails/deptDetails";
 import BatchDetails from "./pages/Batch/batchDetails/batchdetails";
+import SubjectDetails from "./pages/Subject/subjectDetails/subjectDetails";
+import FacultyDetails from "./pages/Faculty/facultydetails";
 
 const queryClient = new QueryClient();
 
@@ -74,8 +76,11 @@ function App() {
             <Route path="/sectionDetails" element={<SectionDetails />} />
             <Route path="/deptDetails" element={<DeptDetails />} />
             <Route path="/batchDetails" element={<BatchDetails/>} />
-            
+            <Route path="/fetchSubjects" element={<SubjectDetails />} />
+            <Route path="/facultyDetails" element={<FacultyDetails/>} />
+ 
           </Route>
+          
 
         </Route>
         <Route path="/*" element={<Navigate to="/404" />} />
