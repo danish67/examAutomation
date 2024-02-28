@@ -76,7 +76,10 @@ function AddSubject() {
       subjectDept.push(item.value);
       // console.log(item.value);
     });
-    console.log("subjectDept"+subjectDept);
+    
+    console.log(subjectDept);
+    console.log(typeof subjectDept);
+    
     try {
       const token = `Token ${localStorage.getItem("token")}`;
       const response = await fetch(
@@ -106,10 +109,13 @@ function AddSubject() {
         setScheme("");
         setSemester("");
         setDepartment("");
+        setSubjectDept([]);
+        setSelectedDepartments([]);
       } else {
         const data = await response.json();
+        setSubjectDept([]);
+        // setSelectedDepartments([]);
         console.error("Failed to add Subject:", data.Error);
-
         alert(`Failed to add Subject: ${data.Error}`);
       }
     } catch (error) {
@@ -125,6 +131,8 @@ function AddSubject() {
     setScheme("");
     setSemester("");
     setDepartment("");
+    setSubjectDept([]);
+    setSelectedDepartments([]);
   };
 
   return (
@@ -250,6 +258,7 @@ function AddSubject() {
               </label>
               <div className="mt-2">
                 <Multiselect
+                  key={selectedDepartments.length}
                   options={departments}
                   selectedValues={selectedDepartments}
                   onSelect={onSelect}
