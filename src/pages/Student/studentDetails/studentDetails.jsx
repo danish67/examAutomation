@@ -22,6 +22,11 @@ function StudentDetails() {
     fetchBatches();
   }, [department]);
 
+  useEffect(() => {
+    fetchStudents();
+  }, [batches]);
+
+
   const fetchDepartments = async () => {
     try {
         const token = `Token ${localStorage.getItem('token')}`;
@@ -77,7 +82,7 @@ function StudentDetails() {
       try {
         const token = `Token ${localStorage.getItem('token')}`;
         const response = await fetch(
-          "http://127.0.0.1:8000/clgadmin/ViewStudentFromBatch/",
+          "http://127.0.0.1:8000/clgadmin/ViewStudentsFromBatches/",
         {
           method : "POST",
           headers: {
@@ -92,6 +97,7 @@ function StudentDetails() {
       if (response.ok) {
         const data = await response.json();
         setStudents(data.result);
+        console.log(students);
       } else {
         console.error("Failed to fetch students");
       }
