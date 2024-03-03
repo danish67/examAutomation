@@ -6,6 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TablePagination from "@mui/material/TablePagination";
 
 function SubjectDetails() {
   const [department, setDepartment] = useState("");
@@ -13,6 +14,8 @@ function SubjectDetails() {
   const [subjects, setSubjects] = useState([]);
   const [maxValue, setMaxValue] = useState();
   const [semester, setSemester] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     fetchDepartments();
@@ -25,6 +28,11 @@ function SubjectDetails() {
   useEffect(() => {
     setMaxValuefunction();
   }, [department]);
+
+  //   //! Work left to do on this
+  const handleEdit = (subject) => {
+    alert(`Subject Name: ${subject.label}, Semester: ${subject.semester}`);
+  };
 
   const fetchDepartments = async () => {
     try {
@@ -73,9 +81,7 @@ function SubjectDetails() {
             label: subject.label,
             semester: subject.semester,
           }));
-          console.log(newSubjects);
           setSubjects(newSubjects);
-          
         } else {
           console.error("Failed to fetch Subjects");
         }
@@ -84,11 +90,8 @@ function SubjectDetails() {
       }
     }
   };
+
   const setMaxValuefunction = () => {
-    console.log("yeh department hai" + department);
-
-    // console.log("yeh department hai" + departments[6][label]);
-
     try {
       if (departments[department - 1].label === "Architecture") {
         setMaxValue(10);
@@ -108,6 +111,22 @@ function SubjectDetails() {
       </option>
     );
   }
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const indexOfLastSubject = (page + 1) * rowsPerPage;
+  const indexOfFirstSubject = indexOfLastSubject - rowsPerPage;
+  const currentSubjects = subjects.slice(
+    indexOfFirstSubject,
+    indexOfLastSubject
+  );
 
   return (
     <form>
@@ -174,24 +193,38 @@ function SubjectDetails() {
                       Subject Name
                     </TableCell>
                     <TableCell sx={{ fontWeight: "bold" }}>Semester</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {subjects
+                  {currentSubjects
                     .filter(
                       (subject) =>
-                        semester === "" ||
-                        subject.semester === semester
+                        semester === "" || subject.semester === semester
                     )
                     .map((subject, index) => (
                       <TableRow key={index}>
                         <TableCell>{subject.label}</TableCell>
                         <TableCell>{subject.semester}</TableCell>
+                        <TableCell style={{ textAlign: "right" }}>
+                          <button onClick={() => handleEdit(subject)}>
+                            <img src="../../../../edit.png" />
+                          </button>
+                        </TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
               </Table>
             </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              colSpan={3}
+              count={subjects.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Paper>
         </div>
       </div>
