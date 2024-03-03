@@ -83,6 +83,9 @@ const LoginFormSection = ({ onToggleForm }) => {
               console.log(token);
               AuthCtx.login(token);
               localStorage.setItem("token", token);
+              localStorage.setItem("role",value1);
+              const expirationTime = new Date().getTime()  + 10 * 60 * 60 * 1000;
+              localStorage.setItem('tokenExpiration', expirationTime);
               navigate("/", { state: { token: token } });
             });
           } else {
