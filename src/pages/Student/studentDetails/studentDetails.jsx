@@ -6,6 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TablePagination from "@mui/material/TablePagination";
 
 function StudentDetails() {
   const [department, setDepartment] = useState("");
@@ -13,6 +14,8 @@ function StudentDetails() {
   const [departments, setDepartments] = useState([]);
   const [batches, setBatches] = useState([]);
   const [students, setStudents] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     fetchDepartments();
@@ -26,30 +29,27 @@ function StudentDetails() {
     fetchStudents();
   }, [batches]);
 
-
   const fetchDepartments = async () => {
     try {
-        const token = `Token ${localStorage.getItem('token')}`;
-        const response = await fetch("http://127.0.0.1:8000/clgadmin/ViewDepartment/", {
-            headers: {
-                'Authorization': `${token}`
-            }
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setDepartments(data.result);
-        } else {
-          console.error("Failed to fetch departments");
+      const token = `Token ${localStorage.getItem("token")}`;
+      const response = await fetch("http://127.0.0.1:8000/clgadmin/ViewDepartment/", {
+        headers: {
+          'Authorization': `${token}`
         }
-      } catch (error) {
-        console.error("Error:", error);
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setDepartments(data.result);
+      } else {
+        console.error("Failed to fetch departments");
       }
-    };
-  
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
-    const fetchBatches = async () => {
-    if (department !== "") 
-    {
+  const fetchBatches = async () => {
+    if (department !== "") {
       try {
         const token = `Token ${localStorage.getItem('token')}`;
         const response = await fetch(
@@ -60,7 +60,7 @@ function StudentDetails() {
               "Content-Type": "application/json",
               'Authorization': `${token}`
             },
-            body : JSON.stringify({
+            body: JSON.stringify({
               department: department,
             }),
           }
@@ -75,45 +75,58 @@ function StudentDetails() {
         console.error("Error:", error);
       }
     }
-    };
-   // Function to fetch students based on department and batch
-    const fetchStudents = async () => {
-      if (department !== "" && batch !== "") {
+  };
+
+  const fetchStudents = async () => {
+    if (department !== "" && batch !== "") {
       try {
         const token = `Token ${localStorage.getItem('token')}`;
         const response = await fetch(
           "http://127.0.0.1:8000/clgadmin/ViewStudentsFromBatches/",
-        {
-          method : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `${token}`
-          },
-          body: JSON.stringify({
-            batch: batch,
-          }),
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `${token}`
+            },
+            body: JSON.stringify({
+              batch: batch,
+            }),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setStudents(data.result);
+        } else {
+          console.error("Failed to fetch students");
         }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setStudents(data.result);
-        console.log(students);
-      } else {
-        console.error("Failed to fetch students");
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
     }
-    }
-    };
-    const handleSubmit = async (event) => {
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Fetch students based on department and batch
     if (department && batch) {
       fetchStudents(department, batch);
     }
-    };
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const indexOfLastStudent = (page + 1) * rowsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - rowsPerPage;
+  const currentStudents = students.slice(indexOfFirstStudent, indexOfLastStudent);
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-10 ml-10 space-y-12">
@@ -135,7 +148,6 @@ function StudentDetails() {
               onChange={(e) => {
                 const selectedDepartment = e.target.value;
                 setDepartment(selectedDepartment);
-                fetchBatches();
               }}
               className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
@@ -189,7 +201,7 @@ function StudentDetails() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {students.map((student, index) => (
+                  {currentStudents.map((student, index) => (
                     <TableRow key={index}>
                       <TableCell>{student.first_name}</TableCell>
                       <TableCell>{student.last_name}</TableCell>
@@ -202,6 +214,15 @@ function StudentDetails() {
                 </TableBody>
               </Table>
             </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              colSpan={6}
+              count={students.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Paper>
         </div>
       </div>
