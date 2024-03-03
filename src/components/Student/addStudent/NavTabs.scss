@@ -4,9 +4,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 8px;
   // border-bottom: 1px solid #ccc;
-  margin-top: 10px;
-  margin-left: 20px;
+  margin-top: 20px;
+  // margin-left: 20px;
 
   .MuiTabs-scroller {
     overflow-x: auto;
@@ -34,9 +35,10 @@
       color: #fff;
       background-color: #4154F1;
     }
-    & {
-      margin-left: 10px;
-    }
+
+    // & {
+    //   // margin-left: 10px;
+    // }
   }
 }
 

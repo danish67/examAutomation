@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -7,6 +8,8 @@ import Tab from "@mui/material/Tab";
 import AddManually from "./addManually";
 import AddExcel from "./addExcel";
 import "./NavTabs.scss"; 
+
+
 
 function LinkTab(props) {
   return (
@@ -20,8 +23,10 @@ LinkTab.propTypes = {
 };
 
 export default function NavTabs() {
+
+
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "fit-content" ,backgroundColor: "#899BBD"}}>
       <Tabs
         path="/addStudent"
         className="tabs"
@@ -29,6 +34,7 @@ export default function NavTabs() {
         role="navigation"
         textColor="secondary"
         indicatorColor="secondary"
+        selectionFollowsFocus="true"
       >
         <LinkTab
           label="Add Manually"
