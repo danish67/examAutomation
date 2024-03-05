@@ -24,31 +24,38 @@ function AssignExam() {
   const [subject, setSubject] = useState("");
   const [subjects, setSubjects] = useState([]);
 
-
   useEffect(() => {
     fetchDepartments();
   }, [section]);
 
   useEffect(() => {
     fetchBatches();
-  }, [department]);
+  }, [department,sections]);
 
   useEffect(() => {
     fetchSubjects();
-  }, [department,exam]);
+  }, [department, exam, section,batch]);
 
   useEffect(() => {
     setMaxValuefunction();
   }, [department]);
   useEffect(() => {
     fetchExam();
-  }, [batch]);
+  }, [batch, section, department]);
 
   useEffect(() => {
     fetchSections();
   }, []);
 
   const fetchSections = async () => {
+    setDepartment("");
+    setDepartments([]);
+    // setBatch("");
+    // setBatches([]);
+    // setExam("");
+    // setExams([]);
+    // setSubject("");
+    // setSubjects([]);
     try {
       const token = `Token ${localStorage.getItem("token")}`;
       const response = await fetch(
@@ -77,6 +84,9 @@ function AssignExam() {
   };
 
   const fetchDepartments = async () => {
+    setBatch("");
+    setBatches([]);
+
     console.log(section);
     if (section !== "") {
       try {
@@ -107,6 +117,9 @@ function AssignExam() {
   };
 
   const fetchBatches = async () => {
+    setExam("");
+    setExams([]);
+
     if (department !== "") {
       try {
         const token = `Token ${localStorage.getItem("token")}`;
@@ -136,6 +149,10 @@ function AssignExam() {
   };
 
   const fetchExam = async () => {
+    setExam("");
+    setExams([]);
+    setSubject("");
+    setSubjects([]);
     console.log(batch);
     if (batch !== "") {
       try {
@@ -160,10 +177,10 @@ function AssignExam() {
           // for (let key in exam) {
           //   console.log(`${key}:`, exam[key]);
           // }
-           if (data.result.length > 0) {
-             const selectedExam = data.result[0]; 
-             setSemester(selectedExam.semester); 
-           }
+          if (data.result.length > 0) {
+            const selectedExam = data.result[0];
+            setSemester(selectedExam.semester);
+          }
         } else {
           console.error("Failed to fetch departments");
         }
@@ -172,7 +189,6 @@ function AssignExam() {
       }
     }
   };
-  
 
   const fetchSubjects = async () => {
     setSubjects([]);
@@ -201,7 +217,6 @@ function AssignExam() {
           //   semester: subject.semester,
           // }));
           setSubjects(data.result);
-
         } else {
           console.error("Failed to fetch Subjects");
         }
