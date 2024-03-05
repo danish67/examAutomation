@@ -2,8 +2,6 @@ import "./styles/global.scss";
 import "./index.css";
 import React, { useState, useEffect } from "react";
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
   BrowserRouter,
   Routes,
   Route,
@@ -75,19 +73,26 @@ function App() {
             <Route path="/assignExam" element={<AssignExam />} />
             <Route path="/sectionDetails" element={<SectionDetails />} />
             <Route path="/deptDetails" element={<DeptDetails />} />
-            <Route path="/batchDetails" element={<BatchDetails/>} />
+            <Route path="/batchDetails" element={<BatchDetails />} />
             <Route path="/fetchSubjects" element={<SubjectDetails />} />
-            <Route path="/facultyDetails" element={<FacultyDetails/>} />
- 
+            <Route path="/facultyDetails" element={<FacultyDetails />} />
           </Route>
-          
-
+        </Route>
+        <Route element={<AuthRequired />}>
+          <Route path="/" element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+          </Route>
+        </Route>
+        <Route element={<AuthRequired />}>
+          <Route path="/" element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+          </Route>
         </Route>
         <Route path="/*" element={<Navigate to="/404" />} />
         <Route path="/404" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
-  );  
+  );
 }
 
 export default App;

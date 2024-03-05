@@ -26,7 +26,7 @@ export default function NavTabs() {
 
 
   return (
-    <Box sx={{ width: "fit-content" ,backgroundColor: "#899BBD"}}>
+    <Box sx={{ width: "fit-content" ,backgroundColor: "white"}}>
       <Tabs
         path="/addStudent"
         className="tabs"

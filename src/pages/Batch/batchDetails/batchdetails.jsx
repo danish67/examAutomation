@@ -131,7 +131,7 @@ function BatchDetails() {
                   {batches.map((batch, index) => (
                     <TableRow key={index}>
                       {/* <TableCell>{department.value}</TableCell> */}
-                      <TableCell>{batch.label}</TableCell>
+                      <TableCell>{`${batch.label} ${batch.department}`}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

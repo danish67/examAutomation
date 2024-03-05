@@ -116,7 +116,7 @@ function AddManually() {
     try {
       const token = `Token ${localStorage.getItem("token")}`;
       const response = await fetch(
-        "http://127.0.0.1:8000/clgadmin/manually_student/",
+        "http://127.0.0.1:8000/clgadmin/addStudentManually/",
         {
           method: "POST",
           headers: {

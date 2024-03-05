@@ -7,6 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 function StudentDetails() {
   const [department, setDepartment] = useState("");
@@ -16,6 +18,7 @@ function StudentDetails() {
   const [students, setStudents] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchDepartments();
@@ -27,7 +30,7 @@ function StudentDetails() {
 
   useEffect(() => {
     fetchStudents();
-  }, [batches]);
+  }, [batch]);
 
   const fetchDepartments = async () => {
     try {
@@ -76,18 +79,20 @@ function StudentDetails() {
       }
     }
   };
-
+//
   const fetchStudents = async () => {
+    setStudents([])
     if (department !== "" && batch !== "") {
+      setLoading(true);
       try {
-        const token = `Token ${localStorage.getItem('token')}`;
+        const token = `Token ${localStorage.getItem("token")}`;
         const response = await fetch(
           "http://127.0.0.1:8000/clgadmin/ViewStudentsFromBatches/",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              'Authorization': `${token}`
+              Authorization: `${token}`,
             },
             body: JSON.stringify({
               batch: batch,
@@ -102,6 +107,8 @@ function StudentDetails() {
         }
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -174,6 +181,7 @@ function StudentDetails() {
               name="batch"
               value={batch}
               onChange={(e) => setBatch(e.target.value)}
+              disabled={!department}
               className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
               <option value="">Select Batch</option>
@@ -186,7 +194,7 @@ function StudentDetails() {
           </div>
         </div>
 
-        <div className="studentDetails" hidden={!department && !batch}>
+        {/* <div className="studentDetails" hidden={!batch}>
           <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
             <TableContainer>
               <Table>
@@ -223,6 +231,65 @@ function StudentDetails() {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
+          </Paper>
+        </div> */}
+        <div className="studentDetails" hidden={!batch}>
+          <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
+            {loading ? ( 
+              <div style={{ textAlign: "center" }}>
+                <CircularProgress />
+              </div>
+            ) : (
+              <div>
+                <TableContainer>
+                  <Table>
+                    <TableHead style={{ backgroundColor: "#f0f0f0" }}>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          First Name
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          Last Name
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          Student Type
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          Category
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          Roll No
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          Gender
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {currentStudents.map((student, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{student.first_name}</TableCell>
+                          <TableCell>{student.last_name}</TableCell>
+                          <TableCell>{student.student_type}</TableCell>
+                          <TableCell>{student.category}</TableCell>
+                          <TableCell>{student.roll_no}</TableCell>
+                          <TableCell>{student.gender}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={6}
+                  count={students.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </div>
+            )}
           </Paper>
         </div>
       </div>
