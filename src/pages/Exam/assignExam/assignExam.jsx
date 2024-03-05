@@ -11,33 +11,39 @@ import TablePagination from "@mui/material/TablePagination";
 function AssignExam() {
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState([]);
-    const [batch, setBatch] = useState("");
-    const [batches, setBatches] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  const [batch, setBatch] = useState("");
+  const [batches, setBatches] = useState([]);
   const [maxValue, setMaxValue] = useState();
   const [semester, setSemester] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-   const [section, setSection] = useState("");
-   const [sections, setSections] = useState([]);
+  const [section, setSection] = useState("");
+  const [sections, setSections] = useState([]);
+  const [exam, setExam] = useState("");
+  const [exams, setExams] = useState([]);
+  const [subject, setSubject] = useState("");
+  const [subjects, setSubjects] = useState([]);
+
 
   useEffect(() => {
     fetchDepartments();
-  }, []);
+  }, [section]);
 
-    useEffect(() => {
-      fetchBatches();
-    }, [department]);
+  useEffect(() => {
+    fetchBatches();
+  }, [department]);
 
   useEffect(() => {
     fetchSubjects();
-  }, [department]);
+  }, [department,exam]);
 
   useEffect(() => {
     setMaxValuefunction();
   }, [department]);
+  useEffect(() => {
+    fetchExam();
+  }, [batch]);
 
-  
   useEffect(() => {
     fetchSections();
   }, []);
@@ -71,62 +77,41 @@ function AssignExam() {
   };
 
   const fetchDepartments = async () => {
-    try {
-      const token = `Token ${localStorage.getItem("token")}`;
-      const response = await fetch(
-        "http://127.0.0.1:8000/clgadmin/ViewDepartment/",
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setDepartments(data.result);
-      } else {
-        console.error("Failed to fetch departments");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-    const fetchBatches = async () => {
-      if (department !== "") {
-        try {
-          const token = `Token ${localStorage.getItem("token")}`;
-          const response = await fetch(
-            "http://127.0.0.1:8000/clgadmin/ViewBatches/",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `${token}`,
-              },
-              body: JSON.stringify({
-                department: department,
-              }),
-            }
-          );
-          if (response.ok) {
-            const data = await response.json();
-            setBatches(data.result);
-          } else {
-            console.error("Failed to fetch batches");
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
-      }
-    };
-
-  const fetchSubjects = async () => {
-    setSubjects([]);
-    if (department !== null && department !== undefined) {
+    console.log(section);
+    if (section !== "") {
       try {
         const token = `Token ${localStorage.getItem("token")}`;
         const response = await fetch(
-          "http://127.0.0.1:8000/clgadmin/viewSubjects/",
+          "http://127.0.0.1:8000/clgadmin/ViewDepartmentFromSection/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}`,
+            },
+            body: JSON.stringify({
+              section: section,
+            }),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setDepartments(data.result);
+        } else {
+          console.error("Failed to fetch departments");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchBatches = async () => {
+    if (department !== "") {
+      try {
+        const token = `Token ${localStorage.getItem("token")}`;
+        const response = await fetch(
+          "http://127.0.0.1:8000/clgadmin/ViewBatches/",
           {
             method: "POST",
             headers: {
@@ -140,12 +125,83 @@ function AssignExam() {
         );
         if (response.ok) {
           const data = await response.json();
-          const newSubjects = data.result.map((subject) => ({
-            value: subject.value,
-            label: subject.label,
-            semester: subject.semester,
-          }));
-          setSubjects(newSubjects);
+          setBatches(data.result);
+        } else {
+          console.error("Failed to fetch batches");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchExam = async () => {
+    console.log(batch);
+    if (batch !== "") {
+      try {
+        const token = `Token ${localStorage.getItem("token")}`;
+        const response = await fetch(
+          "http://127.0.0.1:8000/clgadmin/ViewExamFromBatch/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}`,
+            },
+            body: JSON.stringify({
+              batchId: batch,
+            }),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setExams(data.result);
+          // console.log(JSON.stringify(exam));
+          // for (let key in exam) {
+          //   console.log(`${key}:`, exam[key]);
+          // }
+           if (data.result.length > 0) {
+             const selectedExam = data.result[0]; 
+             setSemester(selectedExam.semester); 
+           }
+        } else {
+          console.error("Failed to fetch departments");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  
+
+  const fetchSubjects = async () => {
+    setSubjects([]);
+    if (department !== null && department !== undefined) {
+      try {
+        const token = `Token ${localStorage.getItem("token")}`;
+        const response = await fetch(
+          "http://127.0.0.1:8000/clgadmin/ViewSubjectFromDepartAndSem/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}`,
+            },
+            body: JSON.stringify({
+              semester: semester,
+              department: department,
+            }),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          // const newSubjects = data.result.map((subject) => ({
+          //   value: subject.value,
+          //   label: subject.label,
+          //   semester: subject.semester,
+          // }));
+          setSubjects(data.result);
+
         } else {
           console.error("Failed to fetch Subjects");
         }
@@ -235,6 +291,7 @@ function AssignExam() {
                 id="department"
                 name="department"
                 value={department}
+                disabled={!section}
                 onChange={(e) => {
                   const selectedDepartment = e.target.value;
                   setDepartment(selectedDepartment);
@@ -276,29 +333,60 @@ function AssignExam() {
             </div>
           </div>
         </div>
-        <div className="sm:col-span-3">
-          <label
-            htmlFor="semester"
-            className="text-sm font-medium leading-6 text-gray-900"
-          >
-            Semester
-          </label>
-          <div className="mt-2">
-            <select
-              id="semester"
-              name="semester"
-              value={semester}
-              onChange={(e) => setSemester(e.target.value)}
-              disabled={!department}
-              className="w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        <div className="space-x-6 flex items-center">
+          <div className="sm:col-span-3 flex-1">
+            <label
+              htmlFor="exam"
+              className="block text-sm font-medium leading-6 text-gray-900"
             >
-              <option value="">Select Semester</option>
-              {dropdownOptions}
-            </select>
+              Exam
+            </label>
+            <div className="mt-2">
+              <select
+                id="exam"
+                name="exam"
+                value={exam}
+                disabled={!batch}
+                onChange={(e) => setExam(e.target.value)}
+                className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option value="">Select Exam</option>
+                {exams.map((exam) => (
+                  <option key={exam.value} value={exam.value}>
+                    {`${exam.month} ${exam.year}`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="sm:col-span-3 flex-1">
+            <label
+              htmlFor="subject"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Subject
+            </label>
+            <div className="mt-2">
+              <select
+                id="subject"
+                name="subject"
+                value={subject}
+                disabled={!batch}
+                onChange={(e) => setSubject(e.target.value)}
+                className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option value="">Select Subject</option>
+                {subjects.map((subject) => (
+                  <option key={subject.id} value={subject.id}>
+                    {subject.Name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        <div className="subjectDetails" hidden={!department}>
+        {/* <div className="subjectDetails" hidden={!department}>
           <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
             <TableContainer>
               <Table>
@@ -341,7 +429,7 @@ function AssignExam() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
-        </div>
+        </div> */}
       </div>
     </form>
   );
