@@ -7,13 +7,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
+import CircularProgress from "@mui/material/CircularProgress";
+import Checkbox from "@mui/material/Checkbox";
 
 function AssignExam() {
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState([]);
   const [batch, setBatch] = useState("");
   const [batches, setBatches] = useState([]);
-  const [maxValue, setMaxValue] = useState();
   const [semester, setSemester] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -23,6 +24,10 @@ function AssignExam() {
   const [exams, setExams] = useState([]);
   const [subject, setSubject] = useState("");
   const [subjects, setSubjects] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState([]);
 
   useEffect(() => {
     fetchDepartments();
@@ -30,26 +35,28 @@ function AssignExam() {
 
   useEffect(() => {
     fetchBatches();
-  }, [department,sections]);
+  }, [department, sections]);
 
   useEffect(() => {
     fetchSubjects();
-  }, [department, exam, section,batch]);
+  }, [department, exam, section, batch]);
 
-  useEffect(() => {
-    setMaxValuefunction();
-  }, [department]);
+  // useEffect(() => {
+  //   setMaxValuefunction();
+  // }, [department]);
   useEffect(() => {
     fetchExam();
   }, [batch, section, department]);
+
+  useEffect(() => {
+    fetchStudents();
+  }, [batch]);
 
   useEffect(() => {
     fetchSections();
   }, []);
 
   const fetchSections = async () => {
-    setDepartment("");
-    setDepartments([]);
     // setBatch("");
     // setBatches([]);
     // setExam("");
@@ -84,8 +91,8 @@ function AssignExam() {
   };
 
   const fetchDepartments = async () => {
-    setBatch("");
-    setBatches([]);
+    setDepartment("");
+    setDepartments([]);
 
     console.log(section);
     if (section !== "") {
@@ -117,8 +124,8 @@ function AssignExam() {
   };
 
   const fetchBatches = async () => {
-    setExam("");
-    setExams([]);
+    setBatch("");
+    setBatches([]);
 
     if (department !== "") {
       try {
@@ -225,28 +232,92 @@ function AssignExam() {
       }
     }
   };
-
-  const setMaxValuefunction = () => {
-    try {
-      if (departments[department - 1].label === "Architecture") {
-        setMaxValue(10);
-      } else {
-        setMaxValue(8);
+  const fetchStudents = async () => {
+    setStudents([]);
+    if (department !== "" && batch !== "") {
+      setLoading(true);
+      try {
+        const token = `Token ${localStorage.getItem("token")}`;
+        const response = await fetch(
+          "http://127.0.0.1:8000/clgadmin/ViewStudentsFromBatches/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}`,
+            },
+            body: JSON.stringify({
+              batch: batch,
+            }),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setStudents(data.result);
+        } else {
+          console.error("Failed to fetch students");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error:", error);
     }
   };
 
-  const dropdownOptions = [];
-  for (let i = 1; i <= maxValue; i++) {
-    dropdownOptions.push(
-      <option key={i} value={i}>
-        {i}
-      </option>
-    );
-  }
+  const toggleSelectAll = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      setSelectedStudents(students.map((student) => student.id));
+    } else {
+      setSelectedStudents([]);
+    }
+  };
 
+  const toggleSelectStudent = (studentId) => {
+    if (selectedStudents.includes(studentId)) {
+      setSelectedStudents(selectedStudents.filter((id) => id !== studentId));
+      console.log("Selected students" + selectedStudents);
+    } else {
+      setSelectedStudents([...selectedStudents, studentId]);
+    }
+  };
+  // const setMaxValuefunction = () => {
+  //   try {
+  //     if (departments[department - 1].label === "Architecture") {
+  //       setMaxValue(10);
+  //     } else {
+  //       setMaxValue(8);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+
+  // const dropdownOptions = [];
+  // for (let i = 1; i <= maxValue; i++) {
+  //   dropdownOptions.push(
+  //     <option key={i} value={i}>
+  //       {i}
+  //     </option>
+  //   );
+  // }
+
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
+
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
+
+  // const indexOfLastSubject = (page + 1) * rowsPerPage;
+  // const indexOfFirstSubject = indexOfLastSubject - rowsPerPage;
+  // const currentSubjects = subjects.slice(
+  //   indexOfFirstSubject,
+  //   indexOfLastSubject
+  // );
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -256,18 +327,18 @@ function AssignExam() {
     setPage(0);
   };
 
-  const indexOfLastSubject = (page + 1) * rowsPerPage;
-  const indexOfFirstSubject = indexOfLastSubject - rowsPerPage;
-  const currentSubjects = subjects.slice(
-    indexOfFirstSubject,
-    indexOfLastSubject
+  const indexOfLastStudent = (page + 1) * rowsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - rowsPerPage;
+  const currentStudents = students.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent
   );
 
   return (
     <form>
       <div className="mt-10 ml-10 space-y-12">
         <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">
-          Subject Details
+          Assign Exam
         </h2>
         <div className="space-x-6 flex items-center">
           <div className="sm:col-span-3 flex-1">
@@ -386,7 +457,7 @@ function AssignExam() {
                 id="subject"
                 name="subject"
                 value={subject}
-                disabled={!batch}
+                disabled={!exam}
                 onChange={(e) => setSubject(e.target.value)}
                 className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
               >
@@ -400,51 +471,62 @@ function AssignExam() {
             </div>
           </div>
         </div>
-
-        {/* <div className="subjectDetails" hidden={!department}>
-          <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
-            <TableContainer>
-              <Table>
-                <TableHead style={{ backgroundColor: "#f0f0f0" }}>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>
-                      Subject Name
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>Semester</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {currentSubjects
-                    .filter(
-                      (subject) =>
-                        semester === "" || subject.semester === semester
-                    )
-                    .map((subject, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{subject.label}</TableCell>
-                        <TableCell>{subject.semester}</TableCell>
-                        <TableCell style={{ textAlign: "right" }}>
-                          <button onClick={() => handleEdit(subject)}>
-                            <img src="../../../../edit.png" />
-                          </button>
+        <div className="studentDetails" hidden={!batch}>
+          <Paper elevation={3} style={{ marginTop: "20px", padding: "5px" }}>
+            {loading ? (
+              <div style={{ textAlign: "center" }}>
+                <CircularProgress />
+              </div>
+            ) : (
+              <div>
+                <TableContainer>
+                  <Table>
+                    <TableHead style={{ backgroundColor: "#f0f0f0" }}>
+                      <TableRow>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectAll}
+                            onChange={toggleSelectAll}
+                          />
+                          Select All
                         </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          Roll No
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
                       </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              colSpan={3}
-              count={subjects.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+                    </TableHead>
+                    <TableBody>
+                      {currentStudents.map((student, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedStudents.includes(student.id)}
+                              onChange={() => toggleSelectStudent(student.id)}
+                            />
+                          </TableCell>
+                          <TableCell>{student.roll_no}</TableCell>
+                          <TableCell>
+                            {`${student.first_name} ${student.last_name}`}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={6}
+                  count={students.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </div>
+            )}
           </Paper>
-        </div> */}
+        </div>
       </div>
     </form>
   );
