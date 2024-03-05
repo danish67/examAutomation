@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Multiselect from "multiselect-react-dropdown";
 // import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 function AddSubject() {
   const [subjectName, setSubjectName] = useState("");
@@ -12,15 +14,16 @@ function AddSubject() {
   const [departments, setDepartments] = useState([]);
   const [subjectDept, setSubjectDept] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
-    const [alertSeverity, setAlertSeverity] = useState("");
-    const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchDepartments();
   }, []);
 
   const onSelect = (selectedList, selectedItem) => {
-    setSubjectDept([])
+    setSubjectDept([]);
     setSelectedDepartments(selectedList);
     // console.log(selectedItem);
     // console.log(selectedList);
@@ -28,7 +31,7 @@ function AddSubject() {
     // console.log("selectedDepartments" + selectedDepartments);
   };
   const onRemove = (selectedList, removedItem) => {
-    setSubjectDept([])
+    setSubjectDept([]);
     setSelectedDepartments(selectedList);
     // console.log("removedItem" + removedItem);
     // console.log("selectedDepartments" + selectedDepartments);
@@ -79,10 +82,11 @@ function AddSubject() {
       subjectDept.push(item.value);
       // console.log(item.value);
     });
-    
+    setLoading(true);
+
     console.log(subjectDept);
     console.log(typeof subjectDept);
-    
+
     try {
       const token = `Token ${localStorage.getItem("token")}`;
       const response = await fetch(
@@ -122,8 +126,8 @@ function AddSubject() {
         // setSelectedDepartments([]);
         console.error("Failed to add Subject:", data.Error);
         // alert(`Failed to add Subject: ${data.Error}`);
-         setAlertSeverity("error");
-         setAlertMessage(`Failed to add Subject: ${data.Error}`);
+        setAlertSeverity("error");
+        setAlertMessage(`Failed to add Subject: ${data.Error}`);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -131,6 +135,8 @@ function AddSubject() {
       // alert("An error occurred while processing your request.");
       setAlertSeverity("error");
       setAlertMessage("An error occurred while processing your request.");
+    } finally {
+      setLoading(false); // Stop loading when API request finishes
     }
   };
 
@@ -148,7 +154,7 @@ function AddSubject() {
     <div>
       {/* Alert component rendering based on state */}
       {alertSeverity && alertMessage && (
-        <div className="flex justify-center items-center ml-100 mt-4">
+        <div className="absolute flex justify-center items-center ml-30 ">
           <Alert
             variant="filled"
             severity={alertSeverity}
@@ -247,34 +253,6 @@ function AddSubject() {
                   />
                 </div>
               </div>
-              {/* <div className="sm:col-span-3">
-              <label
-                htmlFor="department"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Department
-              </label>
-              <div className="mt-2">
-                <select multiple
-                  id="department"
-                  name="department"
-                  value={department}
-                  onChange={(e) => {
-                    const selectedDepartment = e.target.value;
-                    console.log(selectedDepartment);
-                    setDepartment(selectedDepartment);
-                  }}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option value="">Select Department</option>
-                  {departments.map((department) => (
-                    <option key={department.value} value={department.value}>
-                      {department.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div> */}
               <div className="sm:col-span-3">
                 <label
                   htmlFor="department"
@@ -319,11 +297,19 @@ function AddSubject() {
             >
               Cancel
             </button>
+
             <button
               type="submit"
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              disabled={loading}
             >
-              Save
+              {loading ? (
+                <Box sx={{ display: "flex" }}>
+                  <CircularProgress size={24} sx={{ color: "white" }} />
+                </Box>
+              ) : (
+                "Save"
+              )}
             </button>
           </div>
         </div>
