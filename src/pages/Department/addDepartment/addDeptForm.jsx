@@ -4,6 +4,7 @@ function AddDepartmentForm() {
   const [section, setSection] = useState("");
   const [deptname, setDeptname] = useState("");
   const [sections, setSections] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchSections();
@@ -32,10 +33,23 @@ function AddDepartmentForm() {
       console.error("Error:", error);
     }
   };
+      const validateForm = () => {
+        let errors = {};
+        if (!deptname) {
+          errors.deptname = "Department name is required";
+        }
+        if (!section) {
+          errors.section = "Section is required";
+        }
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+      };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+     if (!validateForm()) {
+       return;
+     }
     try {
       const token =
       `Token ${localStorage.getItem('token')}`;
@@ -73,13 +87,23 @@ function AddDepartmentForm() {
     }
   };
 
+
   const clearAll = () => {
     setDeptname("");
     setSection("");
+    setErrors({});
   };
+
+   const handleChange = (field) => {
+     setErrors({
+       ...errors,
+       [field]: "", // Clear the error message for the specified field
+     });
+   };
   
   return (
     <form onSubmit={handleSubmit}>
+      {/* Form content */}
       <div className="mt-5 ml-5 space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">
@@ -100,9 +124,16 @@ function AddDepartmentForm() {
                   id="deptname"
                   name="deptname"
                   value={deptname}
-                  onChange={(e) => setDeptname(e.target.value)}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={(e) => {setDeptname(e.target.value);
+                    handleChange("deptname");
+                  }}
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
+                    errors.deptname && "border-red-500"
+                  }`}
                 />
+                {errors.deptname && (
+                  <p className="text-red-500 text-sm mt-1">{errors.deptname}</p>
+                )}
               </div>
             </div>
 
@@ -118,8 +149,11 @@ function AddDepartmentForm() {
                   id="section"
                   name="section"
                   value={section}
-                  onChange={(e) => setSection(e.target.value)}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  onChange={(e) => {setSection(e.target.value);
+                  handleChange("section");}}
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                    errors.section && "border-red-500"
+                  }`}
                 >
                   <option value="">Select Section</option>
                   {sections.map((section) => (
@@ -128,6 +162,9 @@ function AddDepartmentForm() {
                     </option>
                   ))}
                 </select>
+                {errors.section && (
+                  <p className="text-red-500 text-sm mt-1">{errors.section}</p>
+                )}
               </div>
             </div>
           </div>

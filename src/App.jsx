@@ -79,8 +79,8 @@ function App() {
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
-          <Route path="/" element={<Layout />}>
-            <Route path="/home" element={<Home />} />
+          <Route path="/faculty" element={<Layout />}>
+            <Route path="/faculty/home" element={<Home />} />
           </Route>
         </Route>
         <Route element={<AuthRequired />}>

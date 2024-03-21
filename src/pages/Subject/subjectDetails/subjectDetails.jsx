@@ -25,7 +25,7 @@ function SubjectDetails() {
     fetchSubjects();
   }, [department]);
 
-  useEffect(() => {
+  useEffect(() => { 
     setMaxValuefunction();
   }, [department]);
 

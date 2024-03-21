@@ -15,6 +15,7 @@ function AddExam() {
   const [typeOfExam, setTypeOfExam] = useState("");
   const [semester, setSemester] = useState();
   const[maxValue,setMaxValue] = useState();
+  const [errors, setErrors] = useState({});
 
 
 
@@ -134,6 +135,9 @@ function AddExam() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+      if (!validateForm()) {
+        return;
+      }
 
     try {
       const token = `Token ${localStorage.getItem("token")}`;
@@ -177,6 +181,36 @@ function AddExam() {
       alert("An error occurred while processing your request.");
     }
   };
+   const validateForm = () => {
+     let errors = {};
+     if (!department) {
+       errors.department = "Department is required";
+     }
+     if (!batch) {
+       errors.batch = "Batch is required";
+     }
+     if (!month) {
+       errors.month = "Month is required";
+     }
+     if (!year) {
+       errors.year = "Year is required";
+     }
+     if (!typeOfExam) {
+       errors.typeOfExam = "Type of Exam is required";
+     }
+     if (!semester) {
+       errors.semester = "Semester is required";
+     }
+     setErrors(errors);
+     return Object.keys(errors).length === 0;
+   };
+
+   const handleChange = (field) => {
+     setErrors({
+       ...errors,
+       [field]: "", // Clear the error message for the specified field
+     });
+   };
 
   const clearAll = () => {
         setDepartment("");
@@ -185,6 +219,7 @@ function AddExam() {
         setYear("");
         setTypeOfExam("");
         setSemester("");
+        setErrors({});
   };
 
 
@@ -195,11 +230,12 @@ function AddExam() {
         {/* Existing form content */}
         {/* You can integrate the new fields here */}
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">Exam Information</h2>
+          <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">
+            Exam Information
+          </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            
-          <div className="sm:col-span-3">
+            <div className="sm:col-span-3">
               <label
                 htmlFor="department"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -216,8 +252,11 @@ function AddExam() {
                     console.log(selectedDepartment);
                     setDepartment(selectedDepartment);
                     getValueFromLabel(selectedDepartment);
+                    handleChange("department");
                   }}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                    errors.department && "border-red-500"
+                  }`}
                 >
                   <option value="">Select Department</option>
                   {departments.map((department) => (
@@ -226,6 +265,11 @@ function AddExam() {
                     </option>
                   ))}
                 </select>
+                {errors.department && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.department}
+                  </p>
+                )}
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -240,9 +284,14 @@ function AddExam() {
                   id="batch"
                   name="batch"
                   value={batch}
-                  onChange={(e) => setBatch(e.target.value)}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  onChange={(e) => {
+                    setBatch(e.target.value);
+                    handleChange("batch");
+                  }}
                   disabled={!department}
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                    errors.batch && "border-red-500"
+                  }`}
                 >
                   <option value="">Select Batch</option>
                   {batches.map((batch) => (
@@ -251,11 +300,17 @@ function AddExam() {
                     </option>
                   ))}
                 </select>
+                {errors.batch && (
+                  <p className="text-red-500 text-sm mt-1">{errors.batch}</p>
+                )}
               </div>
             </div>
-            
+
             <div className="sm:col-span-3">
-              <label htmlFor="Month" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="Month"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Month
               </label>
               <div className="mt-2">
@@ -263,14 +318,21 @@ function AddExam() {
                   id="month"
                   name="month"
                   value={month}
-                  onChange={(e) => setMonth(e.target.value)}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  onChange={(e) => {
+                    setMonth(e.target.value);
+                    handleChange("month");
+                  }}
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                    errors.month && "border-red-500"
+                  }`}
                 >
                   <option value="">Select Month</option>
                   <option value="May">May</option>
                   <option value="December">December</option>
-                  
                 </select>
+                {errors.month && (
+                  <p className="text-red-500 text-sm mt-1">{errors.month}</p>
+                )}
               </div>
             </div>
 
@@ -284,37 +346,60 @@ function AddExam() {
               <div className="mt-2">
                 <DatePicker
                   selected={year}
-                  onChange={(date) => setYear(date)}
+                  onChange={(date) => {
+                    setYear(date);
+                    handleChange("year");
+                  }}
                   showYearPicker
                   dateFormat="yyyy"
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   minDate={new Date(currentYear, 0)}
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                    errors.year && "border-red-500"
+                  }`}
                 />
+                {errors.year && (
+                  <p className="text-red-500 text-sm mt-1">{errors.year}</p>
+                )}
               </div>
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="typeOfExam" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="typeOfExam"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Type of Exam
               </label>
               <div className="mt-2">
-              <select
+                <select
                   id="typeOfExam"
                   name="typeOfExam"
                   value={typeOfExam}
-                  onChange={(e) => setTypeOfExam(e.target.value)}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  onChange={(e) => {
+                    setTypeOfExam(e.target.value);
+                    handleChange("typeOfExam");
+                  }}
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                    errors.typeOfExam && "border-red-500"
+                  }`}
                 >
                   <option value="">Select Type of Exam</option>
                   <option value="Regular">Regular</option>
                   <option value="Atkt">Atkt</option>
-                  
                 </select>
+                {errors.typeOfExam && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.typeOfExam}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="semester" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="semester"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Semester
               </label>
               <div className="mt-2">
@@ -325,21 +410,29 @@ function AddExam() {
                   value={semester}
                   min={1}
                   max={maxValue}
-                  // max={10}
-                  onChange={(e) => setSemester(e.target.value)}
+                  onChange={(e) => {
+                    setSemester(e.target.value);
+                    handleChange("semester");
+                  }}
                   disabled={!department}
-                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                    errors.semester && "border-red-500"
+                  }`}
                 />
+                {errors.semester && (
+                  <p className="text-red-500 text-sm mt-1">{errors.semester}</p>
+                )}
               </div>
             </div>
-
-
-            
           </div>
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button type="button" onClick={clearAll} className="text-sm font-semibold leading-6 text-gray-900">
+          <button
+            type="button"
+            onClick={clearAll}
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Cancel
           </button>
           <button

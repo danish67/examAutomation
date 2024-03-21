@@ -56,6 +56,7 @@ function AssignExam() {
     fetchSections();
   }, []);
 
+
   const fetchSections = async () => {
     // setBatch("");
     // setBatches([]);
@@ -282,42 +283,49 @@ function AssignExam() {
       setSelectedStudents([...selectedStudents, studentId]);
     }
   };
-  // const setMaxValuefunction = () => {
+  // const toggleSelectStudent = async (studentId) => {
   //   try {
-  //     if (departments[department - 1].label === "Architecture") {
-  //       setMaxValue(10);
+  //     const isChecked = await isExamAssigned(exam, studentId);
+  //     if (isChecked) {
+  //       setSelectedStudents([...selectedStudents, studentId]);
   //     } else {
-  //       setMaxValue(8);
+  //       setSelectedStudents(selectedStudents.filter((id) => id !== studentId));
   //     }
   //   } catch (error) {
-  //     console.error("Error:", error);
+  //     console.error("Error checking exam assignment:", error);
   //   }
   // };
+    const isExamAssigned = async (examId, studentId) => {
+      console.log(examId, studentId);
+      try {
+        const token = `Token ${localStorage.getItem("token")}`;
+        const response = await fetch(
+          "http://127.0.0.1:8000/clgadmin/isExamAssigned/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}`,
+            },
+            body: JSON.stringify({
+              exam: examId,
+              student: studentId,
+            }),
+          }
+        );
 
-  // const dropdownOptions = [];
-  // for (let i = 1; i <= maxValue; i++) {
-  //   dropdownOptions.push(
-  //     <option key={i} value={i}>
-  //       {i}
-  //     </option>
-  //   );
-  // }
-
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
-
-  // const indexOfLastSubject = (page + 1) * rowsPerPage;
-  // const indexOfFirstSubject = indexOfLastSubject - rowsPerPage;
-  // const currentSubjects = subjects.slice(
-  //   indexOfFirstSubject,
-  //   indexOfLastSubject
-  // );
+        if (response.ok) {
+          const data = await response.json();
+          return data.result; // Returns true or false based on API response
+        } else {
+          console.error("Failed to check exam assignment");
+          return false;
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        return false;
+      }
+    };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -471,7 +479,7 @@ function AssignExam() {
             </div>
           </div>
         </div>
-        <div className="studentDetails" hidden={!batch}>
+        <div className="studentDetails" hidden={!subject}>
           <Paper elevation={3} style={{ marginTop: "20px", padding: "5px" }}>
             {loading ? (
               <div style={{ textAlign: "center" }}>
