@@ -13,7 +13,7 @@ function AddManually() {
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState([]);
   const [deptID, setDeptID] = useState();
-
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchDepartments();
@@ -23,28 +23,60 @@ function AddManually() {
     fetchBatches();
   }, [department]);
 
+  const validateForm = () => {
+    let errors = {};
+    if (!firstName) {
+      errors.firstName = "First name is required";
+    }
+    if (!lastName) {
+      errors.lastName = "Last name is required";
+    }
+    if (!email) {
+      errors.email = "Email is required";
+    } else if (!/\S+@aiktc\.ac\.in/.test(email)) {
+      errors.email = "Email must be in the format example@aiktc.ac.in";
+    }
+    if (!category) {
+      errors.category = "Category is required";
+    }
+    if (!gender) {
+      errors.gender = "Gender is required";
+    }
+    if (!student_type) {
+      errors.student_type = "Student type is required";
+    }
+    if (!department) {
+      errors.department = "Department is required";
+    }
+    if (!batch) {
+      errors.batch = "Batch is required";
+    }
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const getValueFromLabel = async (label) => {
     try {
       const dept = departments.find((dept) => dept.label === label);
       // console.log("dept");
       // console.log(dept.value);
-  
+
       // Simulate an asynchronous operation (e.g., API call)
       setDeptID(dept.value);
       await someAsyncOperation();
-  
+
       // Update the state (setDeptID) with the obtained value
-  
+
       console.log("selected deptID yeh hai");
       console.log(deptID);
-  
+
       return dept.value;
     } catch (error) {
       console.error("Error:", error);
       // Handle errors if necessary
     }
   };
-  
+
   const someAsyncOperation = () => {
     // Simulate an asynchronous operation, for example, an API call
     return new Promise((resolve) => {
@@ -54,11 +86,10 @@ function AddManually() {
       }, 500); // Simulating a 1-second delay
     });
   };
-  
-  
+
   const fetchBatches = async () => {
     console.log(deptID);
-    if (deptID !== null && deptID !== undefined){
+    if (deptID !== null && deptID !== undefined) {
       try {
         const token = `Token ${localStorage.getItem("token")}`;
         const response = await fetch(
@@ -66,7 +97,7 @@ function AddManually() {
           {
             method: "POST",
             headers: {
-              "Content-Type": "application/json", 
+              "Content-Type": "application/json",
               Authorization: `${token}`,
             },
             body: JSON.stringify({
@@ -76,9 +107,8 @@ function AddManually() {
         );
         if (response.ok) {
           const data = await response.json();
-          console.log(data.result)
+          console.log(data.result);
           setBatches(data.result);
-          
         } else {
           console.error("Failed to fetch Batches");
         }
@@ -112,6 +142,10 @@ function AddManually() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       const token = `Token ${localStorage.getItem("token")}`;
@@ -160,6 +194,13 @@ function AddManually() {
     }
   };
 
+  const handleChange = (field) => {
+    setErrors({
+      ...errors,
+      [field]: "", // Clear the error message for the specified field
+    });
+  };
+
   const clearAll = () => {
     setFirstName("");
     setLastName("");
@@ -169,13 +210,12 @@ function AddManually() {
     setDepartment("");
     setBatch("");
     setStudent_type("");
-};
+    setErrors({});
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-5 ml-10   space-y-12">
-        {/* Existing form content */}
-        {/* You can integrate the new fields here */}
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold text-xl leading-7 text-gray-900">
             Student Information
@@ -184,7 +224,7 @@ function AddManually() {
           <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label
-                htmlFor="scheme"
+                htmlFor="firstname"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 First Name
@@ -195,15 +235,23 @@ function AddManually() {
                   id="firstname"
                   name="firstname"
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                    handleChange("firstName");
+                  }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                {errors.firstName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.firstName}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="scheme"
+                htmlFor="lastname"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Last Name
@@ -214,15 +262,21 @@ function AddManually() {
                   id="lastname"
                   name="lastname"
                   value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={(e) => {
+                    setLastName(e.target.value);
+                    handleChange("lastName");
+                  }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                {errors.lastName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                )}
               </div>
             </div>
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="scheme"
+                htmlFor="email"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Email
@@ -233,9 +287,15 @@ function AddManually() {
                   id="email"
                   name="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    handleChange("email");
+                  }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
               </div>
             </div>
 
@@ -251,7 +311,10 @@ function AddManually() {
                   id="category"
                   name="category"
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    handleChange("category");
+                  }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Select Category</option>
@@ -259,6 +322,9 @@ function AddManually() {
                   <option value="EBC">EBC</option>
                   <option value="OBC">OBC</option>
                 </select>
+                {errors.category && (
+                  <p className="text-red-500 text-sm mt-1">{errors.category}</p>
+                )}
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -273,13 +339,19 @@ function AddManually() {
                   id="gender"
                   name="gender"
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  onChange={(e) => {
+                    setGender(e.target.value);
+                    handleChange("gender");
+                  }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
+                {errors.gender && (
+                  <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+                )}
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -294,13 +366,21 @@ function AddManually() {
                   id="student_type"
                   name="student_type"
                   value={student_type}
-                  onChange={(e) => setStudent_type(e.target.value)}
+                  onChange={(e) => {
+                    setStudent_type(e.target.value);
+                    handleChange("student_type");
+                  }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
                   <option value="">Select Student Type</option>
                   <option value="E">E</option>
                   <option value="D">D</option>
                 </select>
+                {errors.student_type && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.student_type}
+                  </p>
+                )}
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -320,6 +400,7 @@ function AddManually() {
                     console.log(selectedDepartment);
                     setDepartment(selectedDepartment);
                     getValueFromLabel(selectedDepartment);
+                    handleChange("department");
                   }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -330,6 +411,11 @@ function AddManually() {
                     </option>
                   ))}
                 </select>
+                {errors.department && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.department}
+                  </p>
+                )}
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -344,7 +430,10 @@ function AddManually() {
                   id="batch"
                   name="batch"
                   value={batch}
-                  onChange={(e) => setBatch(e.target.value)}
+                  onChange={(e) => {
+                    setBatch(e.target.value);
+                    handleChange("batch");
+                  }}
                   className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   disabled={!department}
                 >
@@ -355,6 +444,9 @@ function AddManually() {
                     </option>
                   ))}
                 </select>
+                {errors.batch && (
+                  <p className="text-red-500 text-sm mt-1">{errors.batch}</p>
+                )}
               </div>
             </div>
           </div>
@@ -366,7 +458,7 @@ function AddManually() {
             className="text-sm font-semibold leading-6 text-gray-900"
             onClick={clearAll}
           >
-            Cancel
+            Clear All
           </button>
           <button
             type="submit"

@@ -17,6 +17,7 @@ function AddSubject() {
   const [alertSeverity, setAlertSeverity] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchDepartments();
@@ -73,6 +74,9 @@ function AddSubject() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     // console.log("SubjectName: " + subjectName);
     // console.log("SubjectCode: " + subjectCode);
     // console.log("Scheme: " + scheme);
@@ -139,7 +143,32 @@ function AddSubject() {
       setLoading(false); // Stop loading when API request finishes
     }
   };
-
+  const validateForm = () => {
+    let errors = {};
+    if (!subjectCode) {
+      errors.subjectCode = "Subject Code is required";
+    }
+    if (!subjectName) {
+      errors.subjectName = "Subject Name is required";
+    }
+    if (!scheme) {
+      errors.scheme = "Scheme is required";
+    }
+    if (!semester) {
+      errors.semester = "Semester is required";
+    }
+    if (!subjectDept) {
+      errors.subjectDept = "Department is required";
+    }
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+  const handleChange = (field) => {
+    setErrors({
+      ...errors,
+      [field]: "", // Clear the error message for the specified field
+    });
+  };
   const clearAll = () => {
     setSubjectName("");
     setSubjectCode("");
@@ -191,9 +220,19 @@ function AddSubject() {
                     id="subjectcode"
                     name="subjectcode"
                     value={subjectCode}
-                    onChange={(e) => setSubjectCode(e.target.value)}
-                    className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={(e) => {
+                      setSubjectCode(e.target.value);
+                      handleChange("subjectCode");
+                    }}
+                    className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                      errors.subjectCode && "border-red-500"
+                    }`}
                   />
+                  {errors.subjectCode && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.subjectCode}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -210,9 +249,19 @@ function AddSubject() {
                     id="subjectname"
                     name="subjectname"
                     value={subjectName}
-                    onChange={(e) => setSubjectName(e.target.value)}
-                    className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={(e) => {
+                      setSubjectName(e.target.value);
+                      handleChange("subjectName");
+                    }}
+                    className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                      errors.subjectName && "border-red-500"
+                    }`}
                   />
+                  {errors.subjectName && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.subjectName}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -229,9 +278,17 @@ function AddSubject() {
                     id="scheme"
                     name="scheme"
                     value={scheme}
-                    onChange={(e) => setScheme(e.target.value)}
-                    className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={(e) => {
+                      setScheme(e.target.value);
+                      handleChange("scheme");
+                    }}
+                    className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                      errors.scheme && "border-red-500"
+                    }`}
                   />
+                  {errors.scheme && (
+                    <p className="text-red-500 text-sm mt-1">{errors.scheme}</p>
+                  )}
                 </div>
               </div>
 
@@ -248,11 +305,22 @@ function AddSubject() {
                     id="semester"
                     name="semester"
                     value={semester}
-                    onChange={(e) => setSemester(e.target.value)}
-                    className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={(e) => {
+                      setSemester(e.target.value);
+                      handleChange("semester");
+                    }}
+                    className={`block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 ${
+                      errors.semester && "border-red-500"
+                    }`}
                   />
+                  {errors.semester && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.semester}
+                    </p>
+                  )}
                 </div>
               </div>
+              //! Yaha Validation daalna bacha hai 
               <div className="sm:col-span-3">
                 <label
                   htmlFor="department"
