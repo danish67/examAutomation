@@ -1,6 +1,6 @@
 import React from "react";
-import Content from "../../components/Login/Content";
-import LoginFormSection from "../../components/Login/LoginFormSection";
+import Content from "../../../components/Login/Content";
+import LoginFormSection from "../../../components/Login/LoginFormSection";
 
 export default function Login() {
   return (

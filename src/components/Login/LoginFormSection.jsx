@@ -10,7 +10,7 @@ const LoginFormSection = ({ onToggleForm }) => {
 
   const navigate = useNavigate();
   // let history = useHistory();
-  const [value1, setValue] = useState("faculty");
+  // const [value1, setValue] = useState("admin");
   const [email, setEmail] = useState("");
   const [emailValid, setEmailValid] = useState(true); // State to track email validity
   const [password, setPassword] = useState("");
@@ -18,10 +18,10 @@ const LoginFormSection = ({ onToggleForm }) => {
   const [remember, setRemember] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const changeValue = (value) => {
-    setValue(value);
-    console.log(value);
-  };
+  // const changeValue = (value) => {
+  //   setValue(value);
+  //   console.log(value);
+  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -57,59 +57,103 @@ const LoginFormSection = ({ onToggleForm }) => {
     return password.length >= 8; // For example, check if the password has at least 8 characters
   };
 
-  const loginApi = () => {
-    if (value1 === "faculty") {
-      console.log("faculty me hai");
-    } else if (value1 === "student") {
-      console.log("student me hai");
-    } else if (value1 === "admin") {
-      if (isLogin) {
-      } else {
-        console.log("able else me ja bhi rha hai lya");
-        fetch("http://127.0.0.1:8000/clgadmin/login/", {
-          method: "POST",
-          body: JSON.stringify({
-            username: email,
-            password: password,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then(async (res) => {
-          console.log(res.text);
-          if (res.ok) {
-            await res.json().then((data) => {
-              var token = data["token"];
-              console.log(token);
-              AuthCtx.login(token);
-              localStorage.setItem("token", token);
-              localStorage.setItem("role",value1);
-              const expirationTime = new Date().getTime()  + 10 * 60 * 60 * 1000;
-              localStorage.setItem('tokenExpiration', expirationTime);
-              navigate("/", { state: { token: token } });
-            });
-          } else {
-            return await res.json().then((data) => {
-              let errorMessage = "Authentication Failed";
-              if (data && data.error && data.error.message) {
-                errorMessage = data.error.message;
-              }
-              alert(errorMessage);
-            });
-          }
-        });
-      }
-      console.log(email);
-    }
-    const formData = {
-      role: value1,
-      email: email,
-      password: password,
-      remember: remember,
-    };
+  // const loginApi = () => {
+  //   // if (value1 === "faculty") {
+  //   //   console.log("faculty me hai");
+  //   // } else if (value1 === "student") {
+  //   //   console.log("student me hai");
+  //   // } else if (value1 === "admin") {
+  //     if (isLogin) {
+  //     } else {
+  //       console.log("able else me ja bhi rha hai lya");
+  //       fetch("http://127.0.0.1:8000/clgadmin/login/", {
+  //         method: "POST",
+  //         body: JSON.stringify({
+  //           username: email,
+  //           password: password,
+  //         }),
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }).then(async (res) => {
+  //         console.log(res.text);
+  //         if (res.ok) {
+  //           await res.json().then((data) => {
+  //             var token = data["token"];
+  //             console.log(token);
+  //             // AuthCtx.login(token);
+  //             localStorage.setItem("token", token);
+  //             // localStorage.setItem("role",value1);
+  //             const expirationTime = new Date().getTime()  + 10 * 60 * 60 * 1000;
+  //             localStorage.setItem('tokenExpiration', expirationTime);
+  //             navigate("/admin", { state: { token: token } });
+  //           });
+  //         } else {
+  //           return await res.json().then((data) => {
+  //             let errorMessage = "Authentication Failed";
+  //             if (data && data.error && data.error.message) {
+  //               errorMessage = data.error.message;
+  //             }
+  //             alert(errorMessage);
+  //           });
+  //         }
+  //       });
+  //     }
+  //     console.log(email);
+  //   // }
+  //   // const formData = {
+  //   //   role: value1,
+  //   //   email: email,
+  //   //   password: password,
+  //   //   remember: remember,
+  //   // };
 
-    alert(JSON.stringify(formData, null, 2));
+  //   // alert(JSON.stringify(formData, null, 2));
+  // };
+  const loginApi = () => {
+      fetch("http://127.0.0.1:8000/clgadmin/login/", {
+        method: "POST",
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(async (res) => {
+        if (res.ok) {
+          await res.json().then((data) => {
+            const token = data["token"];
+            localStorage.setItem("token", token);
+            const expirationTime = new Date().getTime() + 10 * 60 * 60 * 1000;
+            localStorage.setItem("tokenExpiration", expirationTime);
+            // Check user roles and navigate accordingly
+            const isAdmin = data["is_admin"];
+            const isStaff = data["is_staff"];
+            if (isAdmin) {
+              navigate("/admin", { state: { token: token } });
+              localStorage.setItem("role", "admin");
+            } else if (isStaff) {
+              navigate("/faculty", { state: { token: token } });
+              localStorage.setItem("role", "faculty");
+            } else {
+              navigate("/student", { state: { token: token } });
+              localStorage.setItem("role", "student");
+            }
+          });
+        } else {
+          return await res.json().then((data) => {
+            let errorMessage = "Authentication Failed";
+            if (data && data.error && data.error.message) {
+              errorMessage = data.error.message;
+            }
+            alert(errorMessage);
+          });
+        }
+      });
+    
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -129,10 +173,10 @@ const LoginFormSection = ({ onToggleForm }) => {
   };
 
   return (
-    <div className="top-[175px] right-[81px] h-[60vh] w-[42vw] overflow-hidden font-roboto nl:w-screen nl:h-auto sl:h-auto mb-4 sl:px-4 sl:w-screen nl:px-24 lg:fixed">
+    <div className="top-[205px] right-[81px] h-[40vh] w-[42vw] overflow-hidden font-roboto nl:w-screen nl:h-auto sl:h-auto mb-4 sl:px-4 sl:w-screen nl:px-24 lg:fixed">
       <div className="relative h-full p-8 bg-loginbackground rounded-lg shadow-xl ">
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <div className="flex justify-between text-mediumslateblue-300">
               <label className="border bor p-2 w-1/4  rounded-lg bg-blackd ">
                 <input
@@ -179,7 +223,7 @@ const LoginFormSection = ({ onToggleForm }) => {
                 Student
               </label>
             </div>
-          </div>
+          </div> */}
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -222,7 +266,7 @@ const LoginFormSection = ({ onToggleForm }) => {
               </button>
             </div>
           </div>
-          <div className="mb-4 flex items-center">
+          {/* <div className="mb-4 flex items-center">
             <input
               type="checkbox"
               id="remember"
@@ -233,7 +277,7 @@ const LoginFormSection = ({ onToggleForm }) => {
             <label htmlFor="remember" className="text-sm text-gray-600">
               Remember me
             </label>
-          </div>
+          </div> */}
           <p
             className="cursor-pointer hover:font-bold text-left mb-4 text-sm text-gray-600 "
             onClick={() => {}}
@@ -246,17 +290,17 @@ const LoginFormSection = ({ onToggleForm }) => {
           >
             Sign In
           </button>
-          {value1 === "faculty" && (
+          {/* {value1 === "faculty" && (
             <p className="text-center mt-4 text-sm text-gray-600">
               Faculty, Don't have an Account?{" "}
-              <span
+              <span 
                 className="cursor-pointer text-mediumslateblue-200"
                 onClick={onToggleForm}
               >
                 Register
               </span>
             </p>
-          )}
+          )} */}
         </form>
       </div>
     </div>

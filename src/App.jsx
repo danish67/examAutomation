@@ -14,26 +14,26 @@ import {
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
 import Menu from "./components/menu/Menu";
-import Login from "./pages/login/Login";
-import AddExam from "./pages/Exam/addExam/addExam";
-import Home from "./pages/home/Home";
+import Login from "./pages/Admin/login/Login";
+import AddExam from "./pages/Admin/Exam/addExam/addExam";
+import Home from "./pages/Admin/home/Home";
 import { QueryClient, QueryClientProvider } from "react-query";
 import AuthRequired from "./AuthRequired";
-import AddStudent from "./pages/Student/addStudent/addStudent";
-import AddBatchForm from "./pages/Batch/addBatch/addBatchForm";
-import AddDepartmentForm from "./pages/Department/addDepartment/addDeptForm";
-import AddSectionForm from "./pages/Section/addSection/addSection";
+import AddStudent from "./pages/Admin/Student/addStudent/addStudent";
+import AddBatchForm from "./pages/Admin/Batch/addBatch/addBatchForm";
+import AddDepartmentForm from "./pages/Admin/Department/addDepartment/addDeptForm";
+import AddSectionForm from "./pages/Admin/Section/addSection/addSection";
 import AddManually from "./components/Student/addStudent/addManually";
 import AddExcel from "./components/Student/addStudent/addExcel";
-import AddSubject from "./pages/Subject/addSubject/addSubject";
-import AssignExam from "./pages/Exam/assignExam/assignExam";
-import StudentDetails from "./pages/Student/studentDetails/studentDetails";
-import PageNotFound from "./pages/Erropages/pageNotFound";
-import SectionDetails from "./pages/Section/sectionDetails/sectionDetails";
-import DeptDetails from "./pages/Department/departmentDetails/deptDetails";
-import BatchDetails from "./pages/Batch/batchDetails/batchdetails";
-import SubjectDetails from "./pages/Subject/subjectDetails/subjectDetails";
-import FacultyDetails from "./pages/Faculty/facultydetails";
+import AddSubject from "./pages/Admin/Subject/addSubject/addSubject";
+import AssignExam from "./pages/Admin/Exam/assignExam/assignExam";
+import StudentDetails from "./pages/Admin/Student/studentDetails/studentDetails";
+import PageNotFound from "./pages/Admin/Erropages/pageNotFound";
+import SectionDetails from "./pages/Admin/Section/sectionDetails/sectionDetails";
+import DeptDetails from "./pages/Admin/Department/departmentDetails/deptDetails";
+import BatchDetails from "./pages/Admin/Batch/batchDetails/batchdetails";
+import SubjectDetails from "./pages/Admin/Subject/subjectDetails/subjectDetails";
+import FacultyDetails from "./pages/Admin/Faculty/facultydetails";
 
 const queryClient = new QueryClient();
 
@@ -58,34 +58,34 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route element={<AuthRequired />}>
-          <Route path="/" element={<Layout />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/addStudent" element={<AddStudent />}>
-              <Route path="/addStudent/addManually" element={<AddManually />} />
-              <Route path="/addStudent/addExcel" element={<AddExcel />} />
+          <Route path="/admin/*" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="addStudent/*" element={<AddStudent />}>
+              <Route path="addManually" element={<AddManually />} />
+              <Route path="addExcel" element={<AddExcel />} />
             </Route>
-            <Route path="/studentDeatils" element={<StudentDetails />} />
-            <Route path="/addBatch" element={<AddBatchForm />} />
-            <Route path="/addDepartment" element={<AddDepartmentForm />} />
-            <Route path="/addSection" element={<AddSectionForm />} />
-            <Route path="/addExam" element={<AddExam />} />
-            <Route path="/addSubject" element={<AddSubject />} />
-            <Route path="/assignExam" element={<AssignExam />} />
-            <Route path="/sectionDetails" element={<SectionDetails />} />
-            <Route path="/deptDetails" element={<DeptDetails />} />
-            <Route path="/batchDetails" element={<BatchDetails />} />
-            <Route path="/fetchSubjects" element={<SubjectDetails />} />
-            <Route path="/facultyDetails" element={<FacultyDetails />} />
+            <Route path="studentDeatils" element={<StudentDetails />} />
+            <Route path="addBatch" element={<AddBatchForm />} />
+            <Route path="addDepartment" element={<AddDepartmentForm />} />
+            <Route path="addSection" element={<AddSectionForm />} />
+            <Route path="addExam" element={<AddExam />} />
+            <Route path="addSubject" element={<AddSubject />} />
+            <Route path="assignExam" element={<AssignExam />} />
+            <Route path="sectionDetails" element={<SectionDetails />} />
+            <Route path="deptDetails" element={<DeptDetails />} />
+            <Route path="batchDetails" element={<BatchDetails />} />
+            <Route path="fetchSubjects" element={<SubjectDetails />} />
+            <Route path="facultyDetails" element={<FacultyDetails />} />
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
-          <Route path="/faculty" element={<Layout />}>
-            <Route path="/faculty/home" element={<Home />} />
+          <Route path="/faculty/*" element={<Layout />}>
+            <Route path="home" element={<Home />} />
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
-          <Route path="/" element={<Layout />}>
-            <Route path="/home" element={<Home />} />
+          <Route path="/student/*" element={<Layout />}>
+            <Route path="home" element={<Home />} />
           </Route>
         </Route>
         <Route path="/*" element={<Navigate to="/404" />} />
