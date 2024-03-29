@@ -1,6 +1,6 @@
 import React from "react";
 // import "./home.scss"
-import NavTabs from "../../../components/Student/addStudent/navTabs";
+import NavTabs from "../../../../components/Student/addStudent/navTabs";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
