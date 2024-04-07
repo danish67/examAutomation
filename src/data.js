@@ -171,9 +171,45 @@ export const menu = {
         },
       ],
     },
+    {
+      id: 2,
+      title: "Dashboard 2",
+      listItems: [
+        {
+          id: 1,
+          title: "Example 2",
+          url: "/student/example2",
+          icon: "home.png",
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: "Dashboard 3",
+      listItems: [
+        {
+          id: 1,
+          title: "Example 3",
+          url: "/student/example3",
+          icon: "home.png",
+        },
+      ],
+    },
     
   ],
   faculty: [
+    {
+      id: 1,
+      title: "Dashboard",
+      listItems: [
+        {
+          id: 1,
+          title: "Main",
+          url: "/faculty/home",
+          icon: "home.png",
+        },
+      ],
+    },
     {
       id: 1,
       title: "Dashboard",
