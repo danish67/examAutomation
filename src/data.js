@@ -102,9 +102,26 @@ export const menu = {
         },
       ],
     },
-
     {
       id: 7,
+      title: "Curriculum",
+      listItems: [
+        {
+          id: 1,
+          title: "Add Curriculum",
+          url: "/admin/addCurriculum",
+          icon: "add.png",
+        },
+        {
+          id: 2,
+          title: "Curriculum Details",
+          url: "/admin/curriculumDetails",
+          icon: "subject.png",
+        },
+      ],
+    },
+    {
+      id: 8,
       title: "Exam",
       listItems: [
         {
@@ -146,7 +163,7 @@ export const menu = {
     //     ],
     // },
     {
-      id: 8,
+      id: 9,
       title: "Marks",
       listItems: [
         {
@@ -171,7 +188,30 @@ export const menu = {
         },
       ],
     },
-    
+    {
+      id: 2,
+      title: "Dashboard 2",
+      listItems: [
+        {
+          id: 1,
+          title: "Example 2",
+          url: "/student/example2",
+          icon: "home.png",
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: "Dashboard 3",
+      listItems: [
+        {
+          id: 1,
+          title: "Example 3",
+          url: "/student/example3",
+          icon: "home.png",
+        },
+      ],
+    },
   ],
   faculty: [
     {
@@ -182,6 +222,18 @@ export const menu = {
           id: 1,
           title: "Main",
           url: "/faculty/home",
+          icon: "home.png",
+        },
+      ],
+    },
+    {
+      id: 2,
+      title: "View Students",
+      listItems: [
+        {
+          id: 1,
+          title: "View Students",
+          url: "/faculty/viewstudents",
           icon: "home.png",
         },
       ],
