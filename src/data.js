@@ -212,6 +212,7 @@ export const menu = {
         },
       ],
     },
+
   ],
   faculty: [
     {
@@ -226,17 +227,6 @@ export const menu = {
         },
       ],
     },
-    {
-      id: 2,
-      title: "View Students",
-      listItems: [
-        {
-          id: 1,
-          title: "View Students",
-          url: "/faculty/viewstudents",
-          icon: "home.png",
-        },
-      ],
-    },
+   
   ],
 };

@@ -34,11 +34,6 @@ import DeptDetails from "./pages/Admin/Department/departmentDetails/deptDetails"
 import BatchDetails from "./pages/Admin/Batch/batchDetails/batchdetails";
 import SubjectDetails from "./pages/Admin/Subject/subjectDetails/subjectDetails";
 import FacultyDetails from "./pages/Admin/Faculty/facultydetails";
-import AddCurriculum from "./pages/Admin/Curriculum/addCurriculum/addCurriculum";
-import AssignExamStudent from "./pages/Student/ExamAssign/AssignExam";
-import AddSubjectStudent from "./pages/Student/AddSubjects/AddSubjects";
-import ViewStudents from "./pages/Student/ViewStudents/ViewStudents";
-
 const queryClient = new QueryClient();
 
 function App() {
@@ -60,6 +55,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
 
         <Route element={<AuthRequired />}>
           <Route path="/admin/*" element={<Layout />}>
