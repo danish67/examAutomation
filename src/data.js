@@ -102,9 +102,26 @@ export const menu = {
         },
       ],
     },
-
     {
       id: 7,
+      title: "Curriculum",
+      listItems: [
+        {
+          id: 1,
+          title: "Add Curriculum",
+          url: "/admin/addCurriculum",
+          icon: "add.png",
+        },
+        {
+          id: 2,
+          title: "Curriculum Details",
+          url: "/admin/curriculumDetails",
+          icon: "subject.png",
+        },
+      ],
+    },
+    {
+      id: 8,
       title: "Exam",
       listItems: [
         {
@@ -146,7 +163,7 @@ export const menu = {
     //     ],
     // },
     {
-      id: 8,
+      id: 9,
       title: "Marks",
       listItems: [
         {
@@ -195,7 +212,7 @@ export const menu = {
         },
       ],
     },
-    
+
   ],
   faculty: [
     {
@@ -210,17 +227,6 @@ export const menu = {
         },
       ],
     },
-    {
-      id: 1,
-      title: "Dashboard",
-      listItems: [
-        {
-          id: 1,
-          title: "Main",
-          url: "/faculty/home",
-          icon: "home.png",
-        },
-      ],
-    },
+   
   ],
 };

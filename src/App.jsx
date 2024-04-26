@@ -34,8 +34,6 @@ import DeptDetails from "./pages/Admin/Department/departmentDetails/deptDetails"
 import BatchDetails from "./pages/Admin/Batch/batchDetails/batchdetails";
 import SubjectDetails from "./pages/Admin/Subject/subjectDetails/subjectDetails";
 import FacultyDetails from "./pages/Admin/Faculty/facultydetails";
-import AssignExamStudent from "./pages/Student/ExamAssign/AssignExam";
-import AddSubjectStudent from "./pages/Student/AddSubjects/AddSubjects";
 const queryClient = new QueryClient();
 
 function App() {
@@ -61,7 +59,7 @@ function App() {
 
         <Route element={<AuthRequired />}>
           <Route path="/admin/*" element={<Layout />}>
-            <Route index element={<Home />} />
+            <Route path="home" element={<Home />} />
             <Route path="addStudent/*" element={<AddStudent />}>
               <Route path="addManually" element={<AddManually />} />
               <Route path="addExcel" element={<AddExcel />} />
@@ -72,17 +70,20 @@ function App() {
             <Route path="addSection" element={<AddSectionForm />} />
             <Route path="addExam" element={<AddExam />} />
             <Route path="addSubject" element={<AddSubject />} />
+            <Route path="addCurriculum" element={<AddCurriculum />} />
             <Route path="assignExam" element={<AssignExam />} />
             <Route path="sectionDetails" element={<SectionDetails />} />
             <Route path="deptDetails" element={<DeptDetails />} />
             <Route path="batchDetails" element={<BatchDetails />} />
             <Route path="fetchSubjects" element={<SubjectDetails />} />
             <Route path="facultyDetails" element={<FacultyDetails />} />
+            <Route path="curriculumDetails" element={<FacultyDetails />} />
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
           <Route path="/faculty/*" element={<Layout />}>
             <Route path="home" element={<Home />} />
+            <Route path="viewstudents" element={<ViewStudents />} />
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
@@ -93,6 +94,7 @@ function App() {
           </Route>
         </Route>
         <Route path="/*" element={<Navigate to="/404" />} />
+        <Route path="/" element={<Navigate to="/admin" />} />
         <Route path="/404" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
