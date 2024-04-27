@@ -62,6 +62,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
 
         <Route element={<AuthRequired />}>
           <Route path="/admin/*" element={<Layout />}>
