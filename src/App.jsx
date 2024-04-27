@@ -35,9 +35,11 @@ import BatchDetails from "./pages/Admin/Batch/batchDetails/batchdetails";
 import SubjectDetails from "./pages/Admin/Subject/subjectDetails/subjectDetails";
 import FacultyDetails from "./pages/Admin/Faculty/facultydetails";
 import AddCurriculum from "./pages/Admin/Curriculum/addCurriculum/addCurriculum";
-import AssignExamStudent from "./pages/Student/ExamAssign/AssignExam";
-import AddSubjectStudent from "./pages/Student/AddSubjects/AddSubjects";
-import ViewStudents from "./pages/Student/ViewStudents/ViewStudents";
+import AssignExamStudent from "./pages/Student/Exam/ExamAssign/AssignExam";
+import AddSubjectStudent from "./pages/Student/Subject/AddSubjects/AddSubjects";
+import ViewStudents from "./pages/Faculty/Student/ViewStudents/ViewStudents";
+import ViewSubject from "./pages/Student/Subject/AddSubjects/ViewSubjects";
+import CourseDetails from "./pages/Faculty/Courses/ViewCourses/ViewCourses";
 
 const queryClient = new QueryClient();
 
@@ -87,13 +89,14 @@ function App() {
         <Route element={<AuthRequired />}>
           <Route path="/faculty/*" element={<Layout />}>
             <Route path="home" element={<Home />} />
-            <Route path="viewstudents" element={<ViewStudents />} />
+            <Route path="viewStudents" element={<ViewStudents />} />
+            <Route path="courseDetails" element={<CourseDetails/>} />
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
           <Route path="/student/*" element={<Layout />}>
             <Route path="home" element={<Home />} />
-            <Route path="example2" element={<AssignExamStudent />} />
+            <Route path="viewSubject" element={<ViewSubject/>} />
             <Route path="example3" element={<AddSubjectStudent />} />
           </Route>
         </Route>

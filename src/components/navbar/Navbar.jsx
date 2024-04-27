@@ -26,8 +26,8 @@ function Navbar() {
       </div>
       <div className="icons">
         <div className="user">
-          <img src="profile.png" alt=""/>
-          <span>Zishan</span>
+          <img src="profile.svg" alt=""/>
+          <span>User</span>
           <button onClick={handleLogout}>
             <img src="logout.png" alt=""/>
           </button>
