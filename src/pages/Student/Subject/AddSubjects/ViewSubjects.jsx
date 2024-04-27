@@ -18,7 +18,7 @@ const ViewSubject = () => {
     try {
       const token = `Token ${localStorage.getItem("token")}`;
       const response = await fetch(
-        "http://127.0.0.1:8000/student/show_subject_to_student/",
+        "http://127.0.0.1:8000/student/show_subjects_assigned_to_student/",
         {
           method: "POST",
           headers: {
@@ -30,6 +30,8 @@ const ViewSubject = () => {
         const data = await response.json();
         setSubjects(data.result);
         console.log("data.result" + data.result);
+        console.log("subjects" + subjects);
+        
       } else {
         console.error("Failed to fetch sections");
       }
@@ -39,16 +41,17 @@ const ViewSubject = () => {
   };
 
   return (
-    <div className="subjectdetails">
-      <h1 style={{ fontSize: "24px", marginTop: "20px", marginLeft: "20px" }}>
-        Course Details
-      </h1>
+  <div className="subjectdetails">
+    <h1 style={{ fontSize: "24px", marginTop: "20px", marginLeft: "20px" }}>
+      Course Details
+    </h1>
+    {subjects && Array.isArray(subjects) && subjects.length > 0 ? (
+      <div>
       <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
         <TableContainer>
           <Table>
             <TableHead style={{ backgroundColor: "#f0f0f0" }}>
               <TableRow>
-                {/* <TableCell>Section ID</TableCell> */}
                 <TableCell sx={{ fontWeight: "bold" }}>Course Code</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Course Name</TableCell>
               </TableRow>
@@ -56,7 +59,6 @@ const ViewSubject = () => {
             <TableBody>
               {subjects.map((subject, index) => (
                 <TableRow key={index}>
-                  {/* <TableCell>{section.value}</TableCell> */}
                   <TableCell>{`${subject.coursecode} `}</TableCell>
                   <TableCell>{`${subject.coursename} `}</TableCell>
                 </TableRow>
@@ -65,8 +67,15 @@ const ViewSubject = () => {
           </Table>
         </TableContainer>
       </Paper>
-    </div>
-  );
+    
+      </div>
+      
+    ) : (
+      <h1>No subjects available</h1>
+    )}
+  </div>
+);
+
 };
 
 export default ViewSubject;

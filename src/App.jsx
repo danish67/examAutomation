@@ -98,7 +98,7 @@ function App() {
           <Route path="/student/*" element={<Layout />}>
             <Route path="home" element={<Home />} />
             <Route path="viewSubject" element={<ViewSubject/>} />
-            <Route path="example3" element={<AddSubjectStudent />} />
+            <Route path="addSubject" element={<AddSubjectStudent />} />
           </Route>
         </Route>
         <Route path="/*" element={<Navigate to="/404" />} />
