@@ -190,11 +190,17 @@ export const menu = {
     },
     {
       id: 2,
-      title: "Dashboard 2",
+      title: "Subject",
       listItems: [
         {
           id: 1,
-          title: "Example 2",
+          title: "View Courses",
+          url: "/student/viewSubject",
+          icon: "home.png",
+        },
+        {
+          id: 2,
+          title: "Choose Courses",
           url: "/student/example2",
           icon: "home.png",
         },
@@ -202,11 +208,11 @@ export const menu = {
     },
     {
       id: 3,
-      title: "Dashboard 3",
+      title: "Exam",
       listItems: [
         {
           id: 1,
-          title: "Example 3",
+          title: "Enroll in Exam",
           url: "/student/example3",
           icon: "home.png",
         },
@@ -227,6 +233,29 @@ export const menu = {
         },
       ],
     },
-   
+    {
+      id: 2,
+      title: "Marks",
+      listItems: [
+        {
+          id: 1,
+          title: "Assign Marks to Students",
+          url: "/faculty/viewStudents",
+          icon: "home.png",
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: "Courses",
+      listItems: [
+        {
+          id: 1,
+          title: "View Courses",
+          url: "/faculty/courseDetails",
+          icon: "home.png",
+        },
+      ],
+    },
   ],
 };
