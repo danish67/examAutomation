@@ -201,7 +201,7 @@ export const menu = {
         {
           id: 2,
           title: "Choose Courses",
-          url: "/student/example2",
+          url: "/student/addSubject",
           icon: "home.png",
         },
       ],
