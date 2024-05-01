@@ -164,12 +164,12 @@ export const menu = {
     // },
     {
       id: 9,
-      title: "Marks",
+      title: "Gazette",
       listItems: [
         {
           id: 1,
-          title: "Assign Marks",
-          url: "/admin",
+          title: "Generate Gazette",
+          url: "/admin/generateGazette",
           icon: "marks.png",
         },
       ],
@@ -194,15 +194,15 @@ export const menu = {
       listItems: [
         {
           id: 1,
-          title: "View Courses",
-          url: "/student/viewSubject",
-          icon: "home.png",
+          title: "Choose Courses",
+          url: "/student/addSubject",
+          icon: "add.png",
         },
         {
           id: 2,
-          title: "Choose Courses",
-          url: "/student/addSubject",
-          icon: "home.png",
+          title: "View Courses",
+          url: "/student/viewSubject",
+          icon: "subject.png",
         },
       ],
     },
@@ -213,12 +213,23 @@ export const menu = {
         {
           id: 1,
           title: "Enroll in Exam",
-          url: "/student/example3",
-          icon: "home.png",
+          url: "/student/examAssign",
+          icon: "examdetails.png",
         },
       ],
     },
-
+    {
+      id: 4,
+      title: "Marks",
+      listItems: [
+        {
+          id: 1,
+          title: "View Marks",
+          url: "/student/viewMarks",
+          icon: "marks.png",
+        },
+      ],
+    },
   ],
   faculty: [
     {
@@ -241,7 +252,7 @@ export const menu = {
           id: 1,
           title: "Assign Marks to Students",
           url: "/faculty/viewStudents",
-          icon: "home.png",
+          icon: "marks.png",
         },
       ],
     },
@@ -253,7 +264,19 @@ export const menu = {
           id: 1,
           title: "View Courses",
           url: "/faculty/courseDetails",
-          icon: "home.png",
+          icon: "subject.png",
+        },
+      ],
+    },
+    {
+      id: 4,
+      title: "HOD Utility",
+      listItems: [
+        {
+          id: 1,
+          title: "Assign Courses to Faculty ",
+          url: "/faculty/courseAssign",
+          icon: "faculty.png",
         },
       ],
     },
