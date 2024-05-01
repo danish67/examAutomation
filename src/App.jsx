@@ -40,6 +40,9 @@ import AddSubjectStudent from "./pages/Student/Subject/AddSubjects/AddSubjects";
 import ViewStudents from "./pages/Faculty/Student/ViewStudents/ViewStudents";
 import ViewSubject from "./pages/Student/Subject/AddSubjects/ViewSubjects";
 import CourseDetails from "./pages/Faculty/Courses/ViewCourses/ViewCourses";
+import CourseAssign from "./pages/Faculty/Faculty/CourseAssign";
+import ViewMarks from "./pages/Student/Marks/ViewMarks";
+import GazetteGen from "./pages/Admin/Gazette/GazetteGeneration/GazetteGen";
 
 const queryClient = new QueryClient();
 
@@ -85,20 +88,25 @@ function App() {
             <Route path="fetchSubjects" element={<SubjectDetails />} />
             <Route path="facultyDetails" element={<FacultyDetails />} />
             <Route path="curriculumDetails" element={<FacultyDetails />} />
+            <Route path="generateGazette" element={<GazetteGen/>} />
+
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
           <Route path="/faculty/*" element={<Layout />}>
             <Route path="home" element={<Home />} />
             <Route path="viewStudents" element={<ViewStudents />} />
-            <Route path="courseDetails" element={<CourseDetails/>} />
+            <Route path="courseDetails" element={<CourseDetails />} />
+            <Route path="courseAssign" element={<CourseAssign />} />
           </Route>
         </Route>
         <Route element={<AuthRequired />}>
           <Route path="/student/*" element={<Layout />}>
             <Route path="home" element={<Home />} />
-            <Route path="viewSubject" element={<ViewSubject/>} />
+            <Route path="viewSubject" element={<ViewSubject />} />
             <Route path="addSubject" element={<AddSubjectStudent />} />
+            <Route path="examAssign" element={<AssignExamStudent />} />
+            <Route path="viewMarks" element={<ViewMarks/>} />
           </Route>
         </Route>
         <Route path="/*" element={<Navigate to="/404" />} />

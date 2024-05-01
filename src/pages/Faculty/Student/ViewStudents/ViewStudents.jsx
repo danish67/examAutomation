@@ -796,6 +796,12 @@ function StudentDetails() {
                                 newStudents[index].marks = e.target.value;
                                 setStudents(newStudents);
                               }}
+                              style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "4px",
+                                padding: "8px",
+                                width: "80px", // Adjust the width as needed
+                              }}
                             />
                           </TableCell>
                         </TableRow>
@@ -831,7 +837,7 @@ function StudentDetails() {
             // onClick={}
             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Save
+            Add Marks
           </button>
         </div>
       </div>

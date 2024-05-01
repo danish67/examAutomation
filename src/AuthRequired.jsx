@@ -22,7 +22,7 @@ const AuthRequired = ({}) => {
       // Token has expired, delete it
       logout();
     } else {
-      console.log(isLoggedIn);
+      // console.log(isLoggedIn);
       return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
     }
   } else {
